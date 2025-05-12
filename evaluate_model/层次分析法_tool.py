@@ -12,9 +12,6 @@ warnings.filterwarnings("ignore")
 plt.rcParams['font.sans-serif'] = ['Microsoft YaHei']  # 支持中文的字体
 plt.rcParams['axes.unicode_minus'] = False  # 解决负号显示问题
 
-# 自定义配色
-custom_palette = ['#f9f7f7', '#dbe2ef', '#3f72af', '#112d4e']
-
 class AHPAnalyzer:
     """
     通用层次分析法(AHP)分析工具
@@ -92,8 +89,8 @@ class AHPAnalyzer:
         ax = sns.heatmap(data, 
                          annot=True, 
                          fmt=".1f", 
-                         cmap=cmap, 
-                         linewidths=0.5)
+                         cmap="vlag", 
+                         linewidths=0.1)
         ax.set_title(title, fontsize=18)
         if x_labels:
             ax.set_xticklabels(x_labels, rotation=45, ha="right", fontsize=10)
