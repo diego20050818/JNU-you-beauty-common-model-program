@@ -1,0 +1,630 @@
+<!DOCTYPE html>
+
+<html lang="zh-cn" data-content_root="./">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>utils package &#8212; JNU-you-beauty v1.0 文档</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=5ecbeea2" />
+    <link rel="stylesheet" type="text/css" href="_static/basic.css?v=686e5160" />
+    <link rel="stylesheet" type="text/css" href="_static/alabaster.css?v=27fed22d" />
+    <script src="_static/documentation_options.js?v=8c87ef09"></script>
+    <script src="_static/doctools.js?v=9bcbadda"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/translations.js?v=beaddf03"></script>
+    <link rel="index" title="索引" href="genindex.html" />
+    <link rel="search" title="搜索" href="search.html" />
+    <link rel="prev" title="utils" href="modules.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+
+  
+  
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section id="utils-package">
+<h1>utils package<a class="headerlink" href="#utils-package" title="Link to this heading">¶</a></h1>
+<section id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Link to this heading">¶</a></h2>
+</section>
+<section id="module-utils.tool">
+<span id="utils-tool-module"></span><h2>utils.tool module<a class="headerlink" href="#module-utils.tool" title="Link to this heading">¶</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="utils.tool.UndirectedGraph">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">utils.tool.</span></span><span class="sig-name descname"><span class="pre">UndirectedGraph</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">node_info</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">graph_edges</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#utils.tool.UndirectedGraph" title="Link to this definition">¶</a></dt>
+<dd><p>基类：<code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>无向图类：用于管理节点属性和边信息，提供图分析功能，适用于数学建模</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="utils.tool.UndirectedGraph.add_edge">
+<span class="sig-name descname"><span class="pre">add_edge</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">node1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">node2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">attributes</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#utils.tool.UndirectedGraph.add_edge" title="Link to this definition">¶</a></dt>
+<dd><p>添加边</p>
+<dl class="simple">
+<dt>参数:</dt><dd><p>node1, node2: 两个节点的ID
+attributes: 边的属性字典</p>
+</dd>
+<dt>返回:</dt><dd><p>布尔值，表示是否成功添加</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="utils.tool.UndirectedGraph.add_edges">
+<span class="sig-name descname"><span class="pre">add_edges</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">edges_list</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#utils.tool.UndirectedGraph.add_edges" title="Link to this definition">¶</a></dt>
+<dd><p>批量添加边</p>
+<dl class="simple">
+<dt>参数:</dt><dd><p>edges_list: 列表，元素为 (node1, node2, attributes) 三元组，attributes可选</p>
+</dd>
+<dt>返回:</dt><dd><p>成功添加的边数量</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="utils.tool.UndirectedGraph.add_node">
+<span class="sig-name descname"><span class="pre">add_node</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">node_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">attributes</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#utils.tool.UndirectedGraph.add_node" title="Link to this definition">¶</a></dt>
+<dd><p>添加新节点</p>
+<dl class="simple">
+<dt>参数:</dt><dd><p>node_id: 节点ID
+attributes: 节点属性字典</p>
+</dd>
+<dt>返回:</dt><dd><p>布尔值，表示是否成功添加</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="utils.tool.UndirectedGraph.add_nodes">
+<span class="sig-name descname"><span class="pre">add_nodes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">nodes_dict</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#utils.tool.UndirectedGraph.add_nodes" title="Link to this definition">¶</a></dt>
+<dd><p>批量添加节点</p>
+<dl class="simple">
+<dt>参数:</dt><dd><p>nodes_dict: 字典，键为节点ID，值为节点属性字典</p>
+</dd>
+<dt>返回:</dt><dd><p>成功添加的节点数量</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="utils.tool.UndirectedGraph.batch_update_edge_attributes">
+<span class="sig-name descname"><span class="pre">batch_update_edge_attributes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">updates</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#utils.tool.UndirectedGraph.batch_update_edge_attributes" title="Link to this definition">¶</a></dt>
+<dd><p>批量更新多条边的属性</p>
+<dl class="simple">
+<dt>参数:</dt><dd><p>updates: 列表，元素为 (node1, node2, attributes) 三元组</p>
+</dd>
+<dt>返回:</dt><dd><p>成功更新的边数量</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="utils.tool.UndirectedGraph.batch_update_node_attributes">
+<span class="sig-name descname"><span class="pre">batch_update_node_attributes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">updates</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#utils.tool.UndirectedGraph.batch_update_node_attributes" title="Link to this definition">¶</a></dt>
+<dd><p>批量更新多个节点的属性</p>
+<dl class="simple">
+<dt>参数:</dt><dd><p>updates: 字典，键为节点ID，值为属性更新字典</p>
+</dd>
+<dt>返回:</dt><dd><p>成功更新的节点数量</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="utils.tool.UndirectedGraph.compute_all_metrics">
+<span class="sig-name descname"><span class="pre">compute_all_metrics</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#utils.tool.UndirectedGraph.compute_all_metrics" title="Link to this definition">¶</a></dt>
+<dd><p>计算图的所有重要指标，返回分析报告</p>
+<dl class="simple">
+<dt>返回:</dt><dd><p>字典，包含各种图指标</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="utils.tool.UndirectedGraph.export_to_csv">
+<span class="sig-name descname"><span class="pre">export_to_csv</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">nodes_file</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'nodes.csv'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">edges_file</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'edges.csv'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#utils.tool.UndirectedGraph.export_to_csv" title="Link to this definition">¶</a></dt>
+<dd><p>将图数据导出为CSV文件</p>
+<dl class="simple">
+<dt>参数:</dt><dd><p>nodes_file: 节点数据的CSV文件名
+edges_file: 边数据的CSV文件名</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="utils.tool.UndirectedGraph.find_edges_by_attribute">
+<span class="sig-name descname"><span class="pre">find_edges_by_attribute</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">attribute</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#utils.tool.UndirectedGraph.find_edges_by_attribute" title="Link to this definition">¶</a></dt>
+<dd><p>查找具有特定属性值的所有边</p>
+<dl class="simple">
+<dt>参数:</dt><dd><p>attribute: 属性名
+value: 属性值</p>
+</dd>
+<dt>返回:</dt><dd><p>边元组列表 [(node1, node2), …]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="utils.tool.UndirectedGraph.find_nodes_by_attribute">
+<span class="sig-name descname"><span class="pre">find_nodes_by_attribute</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">attribute</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#utils.tool.UndirectedGraph.find_nodes_by_attribute" title="Link to this definition">¶</a></dt>
+<dd><p>查找具有特定属性值的所有节点</p>
+<dl class="simple">
+<dt>参数:</dt><dd><p>attribute: 属性名
+value: 属性值</p>
+</dd>
+<dt>返回:</dt><dd><p>节点ID列表</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="utils.tool.UndirectedGraph.find_path">
+<span class="sig-name descname"><span class="pre">find_path</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">start_node</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">end_node</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#utils.tool.UndirectedGraph.find_path" title="Link to this definition">¶</a></dt>
+<dd><p>查找两个节点之间的路径（使用广度优先搜索）</p>
+<dl class="simple">
+<dt>参数:</dt><dd><p>start_node: 起始节点ID
+end_node: 目标节点ID</p>
+</dd>
+<dt>返回:</dt><dd><p>如果存在路径，返回节点ID列表；否则返回None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="utils.tool.UndirectedGraph.get_all_degrees">
+<span class="sig-name descname"><span class="pre">get_all_degrees</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#utils.tool.UndirectedGraph.get_all_degrees" title="Link to this definition">¶</a></dt>
+<dd><p>获取所有节点的度</p>
+<dl class="simple">
+<dt>返回:</dt><dd><p>字典，键为节点ID，值为度数</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="utils.tool.UndirectedGraph.get_all_paths">
+<span class="sig-name descname"><span class="pre">get_all_paths</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">start_node</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">end_node</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_depth</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#utils.tool.UndirectedGraph.get_all_paths" title="Link to this definition">¶</a></dt>
+<dd><p>找出两个节点之间的所有路径（深度优先搜索，限制深度）</p>
+<dl class="simple">
+<dt>参数:</dt><dd><p>start_node: 起始节点ID
+end_node: 目标节点ID
+max_depth: 最大搜索深度，防止路径过长</p>
+</dd>
+<dt>返回:</dt><dd><p>路径列表，每个路径是节点ID的列表</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="utils.tool.UndirectedGraph.get_attribute_summary">
+<span class="sig-name descname"><span class="pre">get_attribute_summary</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">attribute_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'node'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">attribute</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#utils.tool.UndirectedGraph.get_attribute_summary" title="Link to this definition">¶</a></dt>
+<dd><p>获取属性的统计摘要</p>
+<dl class="simple">
+<dt>参数:</dt><dd><p>attribute_type: “node” 或 “edge”，表示节点属性或边属性
+attribute: 属性名，若为None则返回所有属性的统计</p>
+</dd>
+<dt>返回:</dt><dd><p>DataFrame，包含属性统计信息</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="utils.tool.UndirectedGraph.get_average_degree">
+<span class="sig-name descname"><span class="pre">get_average_degree</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#utils.tool.UndirectedGraph.get_average_degree" title="Link to this definition">¶</a></dt>
+<dd><p>计算图的平均度</p>
+<dl class="simple">
+<dt>返回:</dt><dd><p>平均度（浮点数）</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="utils.tool.UndirectedGraph.get_edge">
+<span class="sig-name descname"><span class="pre">get_edge</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">node1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">node2</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#utils.tool.UndirectedGraph.get_edge" title="Link to this definition">¶</a></dt>
+<dd><p>查找两个节点之间的边</p>
+<dl class="simple">
+<dt>参数:</dt><dd><p>node1, node2: 两个节点的ID</p>
+</dd>
+<dt>返回:</dt><dd><p>边信息字典，如果边不存在则返回None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="utils.tool.UndirectedGraph.get_edge_attribute">
+<span class="sig-name descname"><span class="pre">get_edge_attribute</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">node1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">node2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">attribute</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#utils.tool.UndirectedGraph.get_edge_attribute" title="Link to this definition">¶</a></dt>
+<dd><p>获取边的属性</p>
+<dl class="simple">
+<dt>参数:</dt><dd><p>node1, node2: 两个节点的ID
+attribute: 要查询的属性名，若为None则返回该边的所有属性</p>
+</dd>
+<dt>返回:</dt><dd><p>如果attribute为None，返回边的所有属性字典；否则返回指定的属性值
+如果边不存在或属性不存在，返回None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="utils.tool.UndirectedGraph.get_edge_attribute_statistics">
+<span class="sig-name descname"><span class="pre">get_edge_attribute_statistics</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">attribute</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#utils.tool.UndirectedGraph.get_edge_attribute_statistics" title="Link to this definition">¶</a></dt>
+<dd><p>统计边特定属性的分布情况</p>
+<dl class="simple">
+<dt>参数:</dt><dd><p>attribute: 属性名</p>
+</dd>
+<dt>返回:</dt><dd><p>Counter对象，计数每个属性值的出现次数</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="utils.tool.UndirectedGraph.get_node_attribute">
+<span class="sig-name descname"><span class="pre">get_node_attribute</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">node_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">attribute</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#utils.tool.UndirectedGraph.get_node_attribute" title="Link to this definition">¶</a></dt>
+<dd><p>获取节点的属性</p>
+<dl class="simple">
+<dt>参数:</dt><dd><p>node_id: 节点ID
+attribute: 要查询的属性名，若为None则返回该节点的所有属性</p>
+</dd>
+<dt>返回:</dt><dd><p>如果attribute为None，返回节点的所有属性字典；否则返回指定的属性值
+如果节点不存在或属性不存在，返回None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="utils.tool.UndirectedGraph.get_node_attribute_statistics">
+<span class="sig-name descname"><span class="pre">get_node_attribute_statistics</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">attribute</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#utils.tool.UndirectedGraph.get_node_attribute_statistics" title="Link to this definition">¶</a></dt>
+<dd><p>统计节点特定属性的分布情况</p>
+<dl class="simple">
+<dt>参数:</dt><dd><p>attribute: 属性名</p>
+</dd>
+<dt>返回:</dt><dd><p>Counter对象，计数每个属性值的出现次数</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="utils.tool.UndirectedGraph.get_node_degree">
+<span class="sig-name descname"><span class="pre">get_node_degree</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">node_id</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#utils.tool.UndirectedGraph.get_node_degree" title="Link to this definition">¶</a></dt>
+<dd><p>获取节点的度</p>
+<dl class="simple">
+<dt>参数:</dt><dd><p>node_id: 节点ID</p>
+</dd>
+<dt>返回:</dt><dd><p>度数（整数）</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="utils.tool.UndirectedGraph.has_edge">
+<span class="sig-name descname"><span class="pre">has_edge</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">node1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">node2</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#utils.tool.UndirectedGraph.has_edge" title="Link to this definition">¶</a></dt>
+<dd><p>检查两个节点之间是否有边</p>
+<dl class="simple">
+<dt>参数:</dt><dd><p>node1, node2: 两个节点的ID</p>
+</dd>
+<dt>返回:</dt><dd><p>布尔值，表示是否存在边</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="utils.tool.UndirectedGraph.is_connected">
+<span class="sig-name descname"><span class="pre">is_connected</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">node1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">node2</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#utils.tool.UndirectedGraph.is_connected" title="Link to this definition">¶</a></dt>
+<dd><p>检查两个节点是否连通，并打印路径</p>
+<dl class="simple">
+<dt>参数:</dt><dd><p>node1, node2: 两个节点的ID</p>
+</dd>
+<dt>返回:</dt><dd><p>布尔值，表示两个节点是否连通</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="utils.tool.UndirectedGraph.plot_shortest_paths">
+<span class="sig-name descname"><span class="pre">plot_shortest_paths</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">start_node</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">end_nodes</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">figsize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(12,</span> <span class="pre">10)</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#utils.tool.UndirectedGraph.plot_shortest_paths" title="Link to this definition">¶</a></dt>
+<dd><p>可视化从起始节点到一个或多个目标节点的最短路径</p>
+<dl class="simple">
+<dt>参数:</dt><dd><p>start_node: 起始节点ID
+end_nodes: 目标节点ID列表，若为None则选择距离最远的几个节点
+figsize: 图像大小元组 (宽, 高)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="utils.tool.UndirectedGraph.print_graph">
+<span class="sig-name descname"><span class="pre">print_graph</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#utils.tool.UndirectedGraph.print_graph" title="Link to this definition">¶</a></dt>
+<dd><p>打印整个图的结构：节点属性和边信息</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="utils.tool.UndirectedGraph.print_metrics_report">
+<span class="sig-name descname"><span class="pre">print_metrics_report</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#utils.tool.UndirectedGraph.print_metrics_report" title="Link to this definition">¶</a></dt>
+<dd><p>打印图的完整分析报告</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="utils.tool.UndirectedGraph.print_node_neighbors">
+<span class="sig-name descname"><span class="pre">print_node_neighbors</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">node_id</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#utils.tool.UndirectedGraph.print_node_neighbors" title="Link to this definition">¶</a></dt>
+<dd><p>打印指定节点的所有邻居</p>
+<dl class="simple">
+<dt>参数:</dt><dd><p>node_id: 节点ID</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="utils.tool.UndirectedGraph.remove_edge">
+<span class="sig-name descname"><span class="pre">remove_edge</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">node1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">node2</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#utils.tool.UndirectedGraph.remove_edge" title="Link to this definition">¶</a></dt>
+<dd><p>删除边</p>
+<dl class="simple">
+<dt>参数:</dt><dd><p>node1, node2: 两个节点的ID</p>
+</dd>
+<dt>返回:</dt><dd><p>布尔值，表示是否成功删除</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="utils.tool.UndirectedGraph.remove_edges">
+<span class="sig-name descname"><span class="pre">remove_edges</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">edges_list</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#utils.tool.UndirectedGraph.remove_edges" title="Link to this definition">¶</a></dt>
+<dd><p>批量删除边</p>
+<dl class="simple">
+<dt>参数:</dt><dd><p>edges_list: 列表，元素为 (node1, node2) 元组</p>
+</dd>
+<dt>返回:</dt><dd><p>成功删除的边数量</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="utils.tool.UndirectedGraph.remove_node">
+<span class="sig-name descname"><span class="pre">remove_node</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">node_id</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#utils.tool.UndirectedGraph.remove_node" title="Link to this definition">¶</a></dt>
+<dd><p>删除节点及其相关的所有边</p>
+<dl class="simple">
+<dt>参数:</dt><dd><p>node_id: 要删除的节点ID</p>
+</dd>
+<dt>返回:</dt><dd><p>布尔值，表示是否成功删除</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="utils.tool.UndirectedGraph.remove_nodes">
+<span class="sig-name descname"><span class="pre">remove_nodes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">node_ids</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#utils.tool.UndirectedGraph.remove_nodes" title="Link to this definition">¶</a></dt>
+<dd><p>批量删除节点</p>
+<dl class="simple">
+<dt>参数:</dt><dd><p>node_ids: 要删除的节点ID列表</p>
+</dd>
+<dt>返回:</dt><dd><p>成功删除的节点数量</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="utils.tool.UndirectedGraph.to_networkx">
+<span class="sig-name descname"><span class="pre">to_networkx</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#utils.tool.UndirectedGraph.to_networkx" title="Link to this definition">¶</a></dt>
+<dd><p>转换为NetworkX图对象（用于高级分析和可视化）</p>
+<dl class="simple">
+<dt>返回:</dt><dd><p>NetworkX Graph对象</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="utils.tool.UndirectedGraph.to_pandas">
+<span class="sig-name descname"><span class="pre">to_pandas</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#utils.tool.UndirectedGraph.to_pandas" title="Link to this definition">¶</a></dt>
+<dd><p>将图数据转换为Pandas DataFrames（方便导出和分析）</p>
+<dl class="simple">
+<dt>返回:</dt><dd><p>元组 (nodes_df, edges_df)，分别为节点DataFrame和边DataFrame</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="utils.tool.UndirectedGraph.update_edge_attribute">
+<span class="sig-name descname"><span class="pre">update_edge_attribute</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">node1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">node2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">attribute</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#utils.tool.UndirectedGraph.update_edge_attribute" title="Link to this definition">¶</a></dt>
+<dd><p>更新边属性</p>
+<dl class="simple">
+<dt>参数:</dt><dd><p>node1, node2: 两个节点的ID
+attribute: 属性名
+value: 新的属性值</p>
+</dd>
+<dt>返回:</dt><dd><p>布尔值，表示是否成功更新</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="utils.tool.UndirectedGraph.update_edge_attributes">
+<span class="sig-name descname"><span class="pre">update_edge_attributes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">node1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">node2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">attributes</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#utils.tool.UndirectedGraph.update_edge_attributes" title="Link to this definition">¶</a></dt>
+<dd><p>批量更新边属性</p>
+<dl class="simple">
+<dt>参数:</dt><dd><p>node1, node2: 两个节点的ID
+attributes: 属性字典</p>
+</dd>
+<dt>返回:</dt><dd><p>布尔值，表示是否成功更新</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="utils.tool.UndirectedGraph.update_node_attribute">
+<span class="sig-name descname"><span class="pre">update_node_attribute</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">node_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">attribute</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#utils.tool.UndirectedGraph.update_node_attribute" title="Link to this definition">¶</a></dt>
+<dd><p>更新节点属性</p>
+<dl class="simple">
+<dt>参数:</dt><dd><p>node_id: 节点ID
+attribute: 属性名
+value: 新的属性值</p>
+</dd>
+<dt>返回:</dt><dd><p>布尔值，表示是否成功更新</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="utils.tool.UndirectedGraph.update_node_attributes">
+<span class="sig-name descname"><span class="pre">update_node_attributes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">node_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">attributes</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#utils.tool.UndirectedGraph.update_node_attributes" title="Link to this definition">¶</a></dt>
+<dd><p>批量更新节点属性</p>
+<dl class="simple">
+<dt>参数:</dt><dd><p>node_id: 节点ID
+attributes: 属性字典</p>
+</dd>
+<dt>返回:</dt><dd><p>布尔值，表示是否成功更新</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="utils.tool.UndirectedGraph.visualize">
+<span class="sig-name descname"><span class="pre">visualize</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">figsize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(10,</span> <span class="pre">8)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">node_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">300</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">node_color</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'skyblue'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">edge_color</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'gray'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">font_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">with_labels</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">node_attribute</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">edge_attribute</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">title</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#utils.tool.UndirectedGraph.visualize" title="Link to this definition">¶</a></dt>
+<dd><p>可视化图结构</p>
+<dl class="simple">
+<dt>参数:</dt><dd><p>figsize: 图像大小元组 (宽, 高)
+node_size: 节点大小
+node_color: 节点颜色（如果node_attribute不为None，则根据属性映射颜色）
+edge_color: 边颜色（如果edge_attribute不为None，则根据属性映射颜色）
+font_size: 标签字体大小
+with_labels: 是否显示节点标签
+node_attribute: 用于节点颜色映射的属性名
+edge_attribute: 用于边颜色映射的属性名
+title: 图表标题</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="utils.tool.UndirectedGraph.visualize_attribute_distribution">
+<span class="sig-name descname"><span class="pre">visualize_attribute_distribution</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">attribute</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">attribute_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'node'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">figsize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(10,</span> <span class="pre">6)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">plot_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'hist'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">top_n</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#utils.tool.UndirectedGraph.visualize_attribute_distribution" title="Link to this definition">¶</a></dt>
+<dd><p>可视化属性值分布</p>
+<dl class="simple">
+<dt>参数:</dt><dd><p>attribute: 属性名
+attribute_type: “node” 或 “edge”，表示节点属性或边属性
+figsize: 图像大小元组 (宽, 高)
+plot_type: “hist”（直方图）或 “bar”（条形图）
+top_n: 对于条形图，只显示前N个最常见的值</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="utils.tool.UndirectedGraph.visualize_communities">
+<span class="sig-name descname"><span class="pre">visualize_communities</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">algorithm</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'louvain'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">figsize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(12,</span> <span class="pre">10)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">with_labels</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#utils.tool.UndirectedGraph.visualize_communities" title="Link to this definition">¶</a></dt>
+<dd><p>社区检测并可视化</p>
+<dl class="simple">
+<dt>参数:</dt><dd><p>algorithm: 社区检测算法名称，”louvain”、”girvan_newman”或”label_propagation”
+figsize: 图像大小元组 (宽, 高)
+with_labels: 是否显示节点标签</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="utils.tool.UndirectedGraph.visualize_degree_distribution">
+<span class="sig-name descname"><span class="pre">visualize_degree_distribution</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">figsize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(10,</span> <span class="pre">6)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bins</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#utils.tool.UndirectedGraph.visualize_degree_distribution" title="Link to this definition">¶</a></dt>
+<dd><p>可视化节点度分布</p>
+<dl class="simple">
+<dt>参数:</dt><dd><p>figsize: 图像大小元组 (宽, 高)
+bins: 直方图的柱数</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="utils.tool.UndirectedGraph.visualize_graph_metrics">
+<span class="sig-name descname"><span class="pre">visualize_graph_metrics</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">figsize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(15,</span> <span class="pre">10)</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#utils.tool.UndirectedGraph.visualize_graph_metrics" title="Link to this definition">¶</a></dt>
+<dd><p>可视化图的各种度量指标</p>
+<dl class="simple">
+<dt>参数:</dt><dd><p>figsize: 图像大小元组 (宽, 高)</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-utils">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-utils" title="Link to this heading">¶</a></h2>
+</section>
+</section>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">JNU-you-beauty</a></h1>
+
+
+
+
+
+
+
+
+
+<search id="searchbox" style="display: none" role="search">
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" placeholder="Search"/>
+      <input type="submit" value="提交" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script><h3>导航</h3>
+<p class="caption" role="heading"><span class="caption-text">目录</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">utils</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">utils package</a></li>
+</ul>
+</li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+  <li><a href="modules.html">utils</a><ul>
+      <li>Previous: <a href="modules.html" title="上一章">utils</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &#169;2025, diego.
+      
+      |
+      Powered by <a href="https://www.sphinx-doc.org/">Sphinx 8.1.3</a>
+      &amp; <a href="https://alabaster.readthedocs.io">Alabaster 1.0.0</a>
+      
+      |
+      <a href="_sources/utils.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>
