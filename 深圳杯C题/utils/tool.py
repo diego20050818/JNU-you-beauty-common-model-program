@@ -1230,7 +1230,13 @@ class UndirectedGraph:
             
             # 尝试计算可能会失败的指标
             try:
-                metrics['直径'] = nx.diameter(G)
+                try:
+                    metrics['直径'] = nx.diameter(G)
+                except nx.NetworkXError:
+                    # If the graph is not connected, calculate the diameter of the largest connected component
+                    largest_cc = max(nx.connected_components(G), key=len)
+                    subgraph = G.subgraph(largest_cc)
+                    metrics['直径 (最大连通分量)'] = nx.diameter(subgraph)
             except nx.NetworkXError:
                 # 图不连通时会出错
                 largest_cc = max(nx.connected_components(G), key=len)

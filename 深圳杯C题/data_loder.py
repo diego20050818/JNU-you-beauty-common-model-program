@@ -97,7 +97,7 @@ node_info_from_img = {
     39: {"type": "居民", "DG": True},
     40: {"type": "办公和建筑", "DG": False},
     41: {"type": "居民", "DG": False},
-    42: {"type": "商业", "DG": True},
+    42: {"type": "商业", "DG": False},
     43: {"type": "居民", "DG": False},
     44: {"type": "居民", "DG": False},
     45: {"type": "政府和机构", "DG": False},
