@@ -228,19 +228,19 @@ attribute: 属性名，若为None则返回所有属性的统计</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="utils.tool.UndirectedGraph.get_edge">
-<span class="sig-name descname"><span class="pre">get_edge</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">node1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">node2</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#utils.tool.UndirectedGraph.get_edge" title="Link to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">get_edge</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">node1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">node2</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">dict</span></span></span><a class="headerlink" href="#utils.tool.UndirectedGraph.get_edge" title="Link to this definition">¶</a></dt>
 <dd><p>查找两个节点之间的边</p>
 <dl class="simple">
 <dt>参数:</dt><dd><p>node1, node2: 两个节点的ID</p>
 </dd>
-<dt>返回:</dt><dd><p>边信息字典，如果边不存在则返回None</p>
+<dt>返回:</dt><dd><p>边信息字典，如果边不存在则返回空字典</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="utils.tool.UndirectedGraph.get_edge_attribute">
-<span class="sig-name descname"><span class="pre">get_edge_attribute</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">node1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">node2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">attribute</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#utils.tool.UndirectedGraph.get_edge_attribute" title="Link to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">get_edge_attribute</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">node1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">node2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">attribute</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">dict</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></span><a class="headerlink" href="#utils.tool.UndirectedGraph.get_edge_attribute" title="Link to this definition">¶</a></dt>
 <dd><p>获取边的属性</p>
 <dl class="simple">
 <dt>参数:</dt><dd><p>node1, node2: 两个节点的ID
@@ -322,6 +322,18 @@ attribute: 要查询的属性名，若为None则返回该节点的所有属性</
 <dt>参数:</dt><dd><p>node1, node2: 两个节点的ID</p>
 </dd>
 <dt>返回:</dt><dd><p>布尔值，表示两个节点是否连通</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="utils.tool.UndirectedGraph.neighbors">
+<span class="sig-name descname"><span class="pre">neighbors</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">node_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#utils.tool.UndirectedGraph.neighbors" title="Link to this definition">¶</a></dt>
+<dd><p>获取指定节点的所有邻居节点</p>
+<dl class="simple">
+<dt>参数:</dt><dd><p>node_id: 节点ID</p>
+</dd>
+<dt>返回:</dt><dd><p>邻居节点ID列表</p>
 </dd>
 </dl>
 </dd></dl>
@@ -549,6 +561,94 @@ bins: 直方图的柱数</p>
 
 </dd></dl>
 
+</section>
+<section id="utils-riskanalyzer-module">
+<h2>utils.RiskAnalyzer module<a class="headerlink" href="#utils-riskanalyzer-module" title="Link to this heading">¶</a></h2>
+<p id="module-utils.RiskAnalyzer">RiskAnalyzer.py
+本模块定义了 RiskAnalyzer 类，用于对电力网络中的风险进行分析和评估。主要功能包括：
+- 计算电网边的容量
+- 刷新所有边的容量信息
+- 使用 Edmonds-Karp 算法计算网络最大流
+- 计算线路的故障概率
+- 评估线路的失负荷风险
+- 评估线路的过载风险
+类:</p>
+<blockquote>
+<div><dl class="simple">
+<dt>RiskAnalyzer</dt><dd><p>用于分析电力网络中各类风险，包括失负荷风险和过载风险。</p>
+</dd>
+</dl>
+</div></blockquote>
+<dl class="simple">
+<dt>方法:</dt><dd><dl class="simple">
+<dt>__init__(self, nodes_info:dict[str, dict], edges_info:list[dict[tuple,dict]])</dt><dd><p>初始化 RiskAnalyzer 实例，加载节点和边的信息，构建无向图。</p>
+</dd>
+<dt>capacity(self, u:int, v:int) -&gt; float</dt><dd><p>计算并返回指定边 (u, v) 的容量。</p>
+</dd>
+<dt>refreash_capacity(self) -&gt; None</dt><dd><p>刷新所有边的容量信息。</p>
+</dd>
+<dt>edmonds_karp(self, source, sink) -&gt; float</dt><dd><p>使用 Edmonds-Karp 算法计算从源点到汇点的最大流。</p>
+</dd>
+<dt>failure_probability(self, line:tuple) -&gt; float</dt><dd><p>计算指定线路的故障概率。</p>
+</dd>
+<dt>load_loss_risk(self, line) -&gt; float</dt><dd><p>计算指定线路的失负荷风险。</p>
+</dd>
+<dt>overload_risk(self, line) -&gt; float</dt><dd><p>计算指定线路的过载风险。</p>
+</dd>
+</dl>
+</dd>
+<dt>依赖:</dt><dd><ul class="simple">
+<li><p>pandas</p></li>
+<li><p>numpy</p></li>
+<li><p>matplotlib</p></li>
+<li><p>collections.deque</p></li>
+<li><p>json</p></li>
+<li><p>loguru</p></li>
+<li><p>utils.tool (自定义工具模块)</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py class">
+<dt class="sig sig-object py" id="utils.RiskAnalyzer.RiskAnalyzer">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">utils.RiskAnalyzer.</span></span><span class="sig-name descname"><span class="pre">RiskAnalyzer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">nodes_info</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">dict</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">edges_info</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">tuple</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">dict</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#utils.RiskAnalyzer.RiskAnalyzer" title="Link to this definition">¶</a></dt>
+<dd><p>基类：<code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="utils.RiskAnalyzer.RiskAnalyzer.capacity">
+<span class="sig-name descname"><span class="pre">capacity</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">u</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">v</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="headerlink" href="#utils.RiskAnalyzer.RiskAnalyzer.capacity" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="utils.RiskAnalyzer.RiskAnalyzer.edmonds_karp">
+<span class="sig-name descname"><span class="pre">edmonds_karp</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">source</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sink</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="headerlink" href="#utils.RiskAnalyzer.RiskAnalyzer.edmonds_karp" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="utils.RiskAnalyzer.RiskAnalyzer.failure_probability">
+<span class="sig-name descname"><span class="pre">failure_probability</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">line</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">tuple</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="headerlink" href="#utils.RiskAnalyzer.RiskAnalyzer.failure_probability" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="utils.RiskAnalyzer.RiskAnalyzer.load_loss_risk">
+<span class="sig-name descname"><span class="pre">load_loss_risk</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">line</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="headerlink" href="#utils.RiskAnalyzer.RiskAnalyzer.load_loss_risk" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="utils.RiskAnalyzer.RiskAnalyzer.overload_risk">
+<span class="sig-name descname"><span class="pre">overload_risk</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">line</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="headerlink" href="#utils.RiskAnalyzer.RiskAnalyzer.overload_risk" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="utils.RiskAnalyzer.RiskAnalyzer.refreash_capacity">
+<span class="sig-name descname"><span class="pre">refreash_capacity</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#utils.RiskAnalyzer.RiskAnalyzer.refreash_capacity" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="utils-data-loder-module">
+<h2>utils.data_loder module<a class="headerlink" href="#utils-data-loder-module" title="Link to this heading">¶</a></h2>
+<p id="module-utils.data_loder"># 将数据加载到内存中
+数据格式为json</p>
 </section>
 <section id="module-utils">
 <span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-utils" title="Link to this heading">¶</a></h2>

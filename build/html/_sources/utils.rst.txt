@@ -12,6 +12,22 @@ utils.tool module
    :undoc-members:
    :show-inheritance:
 
+utils.RiskAnalyzer module
+------------------------
+
+.. automodule:: utils.RiskAnalyzer
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+utils.data_loder module
+----------------------
+
+.. automodule:: utils.data_loder
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 Module contents
 ---------------
 

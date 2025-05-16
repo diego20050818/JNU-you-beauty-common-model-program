@@ -2,311 +2,373 @@
     "1": {
         "type": "居民",
         "DG": false,
-        "power": 40.0
+        "power": 40.0,
+        "which_substation": "CB1"
     },
     "2": {
         "type": "居民",
         "DG": false,
-        "power": 60.0
+        "power": 60.0,
+        "which_substation": "CB1"
     },
     "3": {
         "type": "居民",
         "DG": false,
-        "power": 60.0
+        "power": 60.0,
+        "which_substation": "CB1"
     },
     "4": {
         "type": "居民",
         "DG": false,
-        "power": 60.0
+        "power": 60.0,
+        "which_substation": "CB1"
     },
     "5": {
         "type": "居民",
         "DG": false,
-        "power": 100.0
+        "power": 100.0,
+        "which_substation": "CB1"
     },
     "6": {
         "type": "居民",
         "DG": false,
-        "power": 60.0
+        "power": 60.0,
+        "which_substation": "CB1"
     },
     "7": {
         "type": "办公和建筑",
         "DG": false,
-        "power": 60.0
+        "power": 60.0,
+        "which_substation": "CB1"
     },
     "8": {
         "type": "居民",
         "DG": false,
-        "power": 60.0
+        "power": 60.0,
+        "which_substation": "CB1"
     },
     "9": {
         "type": "政府和机构",
         "DG": false,
-        "power": 120.0
+        "power": 120.0,
+        "which_substation": "CB1"
     },
     "10": {
         "type": "居民",
         "DG": false,
-        "power": 200.0
+        "power": 200.0,
+        "which_substation": "CB1"
     },
     "11": {
         "type": "商业",
         "DG": false,
-        "power": 150.0
+        "power": 150.0,
+        "which_substation": "CB1"
     },
     "12": {
         "type": "办公和建筑",
         "DG": false,
-        "power": 200.0
+        "power": 200.0,
+        "which_substation": "CB1"
     },
     "13": {
         "type": "居民",
         "DG": false,
-        "power": 60.0
+        "power": 60.0,
+        "which_substation": "CB1"
     },
     "14": {
         "type": "办公和建筑",
         "DG": false,
-        "power": 420.0
+        "power": 420.0,
+        "which_substation": "CB1"
     },
     "15": {
         "type": "居民",
         "DG": false,
-        "power": 210.0
+        "power": 210.0,
+        "which_substation": "CB1"
     },
     "16": {
         "type": "商业",
         "DG": true,
-        "power": 120.0
+        "power": 120.0,
+        "which_substation": "CB1"
     },
     "17": {
         "type": "居民",
         "DG": false,
-        "power": 40.0
+        "power": 40.0,
+        "which_substation": "CB1"
     },
     "18": {
         "type": "办公和建筑",
         "DG": false,
-        "power": 100.0
+        "power": 100.0,
+        "which_substation": "CB1"
     },
     "19": {
         "type": "居民",
         "DG": false,
-        "power": 24.0
+        "power": 24.0,
+        "which_substation": "CB1"
     },
     "20": {
         "type": "居民",
         "DG": false,
-        "power": 60.0
+        "power": 60.0,
+        "which_substation": "CB1"
     },
     "21": {
         "type": "政府和机构",
         "DG": false,
-        "power": 60.0
+        "power": 60.0,
+        "which_substation": "CB1"
     },
     "22": {
         "type": "居民",
         "DG": true,
-        "power": 60.0
+        "power": 60.0,
+        "which_substation": "CB1"
     },
     "23": {
         "type": "居民",
         "DG": false,
-        "power": 60.0
+        "power": 60.0,
+        "which_substation": "CB3"
     },
     "24": {
         "type": "居民",
         "DG": false,
-        "power": 40.0
+        "power": 40.0,
+        "which_substation": "CB3"
     },
     "25": {
         "type": "居民",
         "DG": false,
-        "power": 60.0
+        "power": 60.0,
+        "which_substation": "CB3"
     },
     "26": {
         "type": "居民",
         "DG": false,
-        "power": 40.0
+        "power": 40.0,
+        "which_substation": "CB3"
     },
     "27": {
         "type": "商业",
         "DG": false,
-        "power": 60.0
+        "power": 60.0,
+        "which_substation": "CB3"
     },
     "28": {
         "type": "居民",
         "DG": false,
-        "power": 100.0
+        "power": 100.0,
+        "which_substation": "CB3"
     },
     "29": {
         "type": "政府和机构",
         "DG": false,
-        "power": 60.0
+        "power": 60.0,
+        "which_substation": "CB3"
     },
     "30": {
         "type": "居民",
         "DG": false,
-        "power": 100.0
+        "power": 100.0,
+        "which_substation": "CB3"
     },
     "31": {
         "type": "商业",
         "DG": false,
-        "power": 120.0
+        "power": 120.0,
+        "which_substation": "CB3"
     },
     "32": {
         "type": "办公和建筑",
         "DG": true,
-        "power": 200.0
+        "power": 200.0,
+        "which_substation": "CB3"
     },
     "33": {
         "type": "商业",
         "DG": false,
-        "power": 150.0
+        "power": 150.0,
+        "which_substation": "CB3"
     },
     "34": {
         "type": "商业",
         "DG": false,
-        "power": 90.0
+        "power": 90.0,
+        "which_substation": "CB3"
     },
     "35": {
         "type": "居民",
         "DG": true,
-        "power": 40.0
+        "power": 40.0,
+        "which_substation": "CB3"
     },
     "36": {
         "type": "政府和机构",
         "DG": false,
-        "power": 100.0
+        "power": 100.0,
+        "which_substation": "CB3"
     },
     "37": {
         "type": "居民",
         "DG": false,
-        "power": 90.0
+        "power": 90.0,
+        "which_substation": "CB3"
     },
     "38": {
         "type": "商业",
         "DG": false,
-        "power": 210.0
+        "power": 210.0,
+        "which_substation": "CB3"
     },
     "39": {
         "type": "居民",
         "DG": true,
-        "power": 90.0
+        "power": 90.0,
+        "which_substation": "CB3"
     },
     "40": {
         "type": "办公和建筑",
         "DG": false,
-        "power": 120.0
+        "power": 120.0,
+        "which_substation": "CB3"
     },
     "41": {
         "type": "居民",
         "DG": false,
-        "power": 60.0
+        "power": 60.0,
+        "which_substation": "CB3"
     },
     "42": {
         "type": "商业",
         "DG": false,
-        "power": 100.0
+        "power": 100.0,
+        "which_substation": "CB3"
     },
     "43": {
         "type": "居民",
         "DG": false,
-        "power": 40.0
+        "power": 40.0,
+        "which_substation": "CB2"
     },
     "44": {
         "type": "居民",
         "DG": false,
-        "power": 60.0
+        "power": 60.0,
+        "which_substation": "CB2"
     },
     "45": {
         "type": "政府和机构",
         "DG": false,
-        "power": 120.0
+        "power": 120.0,
+        "which_substation": "CB2"
     },
     "46": {
         "type": "居民",
         "DG": false,
-        "power": 150.0
+        "power": 150.0,
+        "which_substation": "CB2"
     },
     "47": {
         "type": "办公和建筑",
         "DG": false,
-        "power": 200.0
+        "power": 200.0,
+        "which_substation": "CB2"
     },
     "48": {
         "type": "居民",
         "DG": true,
-        "power": 420.0
+        "power": 420.0,
+        "which_substation": "CB2"
     },
     "49": {
         "type": "商业",
         "DG": false,
-        "power": 420.0
+        "power": 420.0,
+        "which_substation": "CB2"
     },
     "50": {
         "type": "居民",
         "DG": false,
-        "power": 60.0
+        "power": 60.0,
+        "which_substation": "CB2"
     },
     "51": {
         "type": "居民",
         "DG": false,
-        "power": 420.0
+        "power": 420.0,
+        "which_substation": "CB2"
     },
     "52": {
         "type": "居民",
         "DG": true,
-        "power": 200.0
+        "power": 200.0,
+        "which_substation": "CB2"
     },
     "53": {
         "type": "商业",
         "DG": false,
-        "power": 200.0
+        "power": 200.0,
+        "which_substation": "CB2"
     },
     "54": {
         "type": "居民",
         "DG": false,
-        "power": 150.0
+        "power": 150.0,
+        "which_substation": "CB2"
     },
     "55": {
         "type": "居民",
         "DG": true,
-        "power": 200.0
+        "power": 200.0,
+        "which_substation": "CB2"
     },
     "56": {
         "type": "商业",
         "DG": false,
-        "power": 40.0
+        "power": 40.0,
+        "which_substation": "CB2"
     },
     "57": {
         "type": "居民",
         "DG": false,
-        "power": 120.0
+        "power": 120.0,
+        "which_substation": "CB2"
     },
     "58": {
         "type": "政府和机构",
         "DG": false,
-        "power": 60.0
+        "power": 60.0,
+        "which_substation": "CB2"
     },
     "59": {
         "type": "居民",
         "DG": false,
-        "power": 45.0
+        "power": 45.0,
+        "which_substation": "CB2"
     },
     "60": {
         "type": "居民",
         "DG": false,
-        "power": 60.0
+        "power": 60.0,
+        "which_substation": "CB2"
     },
     "61": {
         "type": "政府和机构",
         "DG": false,
-        "power": 90.0
+        "power": 90.0,
+        "which_substation": "CB2"
     },
     "62": {
         "type": "居民",
         "DG": false,
-        "power": 120.0
+        "power": 120.0,
+        "which_substation": "CB2"
     }
 }

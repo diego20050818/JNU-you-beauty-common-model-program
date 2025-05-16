@@ -17,17 +17,27 @@ info = pandas.read_excel(r'E:\学习\数模相关\code_of_argorithm\深圳杯C�
 
 #+++++++数据预处理+++++++++++
 from itertools import islice
-
 nodes_info = []
 #print("=" * 20+"node info"+"=" * 20)
 for _,content in data.iterrows():
+    #id节点编号，p功率，which_substation所接变电站
     #print(f"NO.{id}:\tP:{p}kW")
     id,p = tuple(content)
     id:int = int(id)
     p:float = float(p)
+    if 1 <= id <= 22:
+        which_substation = "CB1"
+    elif 23 <= id <= 42:
+        which_substation = "CB3"
+    elif 43 <= id <= 62:
+        which_substation = "CB2"
+    else:
+        which_substation = None  # 或抛出异常
+
     node_info = {
         "id": id,
-        "p": p
+        "p": p,
+        "which_substation": which_substation,  # 变电站信息
     }
     nodes_info.append(node_info)
 
@@ -36,7 +46,7 @@ for _,content in data.iterrows():
 edges_info = []    
 #print("=" * 20+"edge info"+"=" * 20)
 for _,content in info.iterrows():
-    #from_node起点，to_node终点,length长度,resistor电阻，reactance电抗
+    #from_node起点，to_node终点,length长度,resistor电阻，reactance电抗,which_substation所接变电站
     id,from_node,to_node,length,Resistor,Reactance = tuple(content)
     id:int = int(id)
     from_node:int = int(from_node)
@@ -54,7 +64,7 @@ for _,content in info.iterrows():
 
     graph_edges = []
 
-# 辅助：定义每个节点的属性（负荷类型、是否接DG）
+# 辅助：,定,义每个节点的属性（负荷类型、是否接DG）
 node_info_from_img = {
     1: {"type": "居民", "DG": False},
     2: {"type": "居民", "DG": False},
@@ -122,6 +132,7 @@ node_info_from_img = {
 
 for info in nodes_info:
     node_info_from_img[info["id"]]["power"] = info["p"]  # 添加功率属性
+    node_info_from_img[info["id"]]["which_substation"] = info["which_substation"]  # 添加变电站属性
 
 
 

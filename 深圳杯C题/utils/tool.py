@@ -4,6 +4,8 @@ import pandas as pd
 import numpy as np
 from collections import Counter
 import networkx as nx
+from loguru import logger
+from typing import Union, Optional
 
 class UndirectedGraph:
     """
@@ -17,6 +19,7 @@ class UndirectedGraph:
             node_info: 字典，键为节点ID，值为节点属性字典
             graph_edges: 列表，包含边信息字典，格式为[{(from_node,to_node):{边信息}}]
         """
+        logger.info("初始化UndirectedGraph，节点数: {}, 边数: {}".format(len(node_info), len(graph_edges)))
         self.node_info = node_info
         self.graph_edges = graph_edges
         # 构建邻接表，用于路径查找和连通性检查
@@ -24,6 +27,7 @@ class UndirectedGraph:
         
     def _build_adjacency_list(self):
         """构建邻接表，用于快速查找相邻节点"""
+        logger.info("构建邻接表")
         adjacency_list = {}
         
         # 初始化所有节点的邻接列表为空列表
@@ -41,7 +45,26 @@ class UndirectedGraph:
                 adjacency_list[node1].append(node2)
                 adjacency_list[node2].append(node1)  # 因为是无向图，所以两个方向都添加
                 
+        logger.info("邻接表构建完成")
         return adjacency_list
+    
+    def neighbors(self, node_id: int) -> list[int]:
+        """
+        获取指定节点的所有邻居节点
+        
+        参数:
+            node_id: 节点ID
+            
+        返回:
+            邻居节点ID列表
+        """
+        if node_id not in self.adjacency_list:
+            logger.error(f"节点 {node_id} 不存在")
+            print(f"节点 {node_id} 不存在")
+            return []
+        
+        logger.info(f"获取节点 {node_id} 的邻居: {self.adjacency_list[node_id]}")
+        return self.adjacency_list[node_id]
     
     def get_node_attribute(self, node_id, attribute=None):
         """
@@ -56,18 +79,22 @@ class UndirectedGraph:
             如果节点不存在或属性不存在，返回None
         """
         if node_id not in self.node_info:
+            logger.error(f"节点 {node_id} 不存在")
             print(f"节点 {node_id} 不存在")
             return None
             
         if attribute is None:
+            logger.info(f"获取节点 {node_id} 的所有属性: {self.node_info[node_id]}")
             return self.node_info[node_id]
         elif attribute in self.node_info[node_id]:
+            logger.info(f"获取节点 {node_id} 的属性 '{attribute}': {self.node_info[node_id][attribute]}")
             return self.node_info[node_id][attribute]
         else:
+            logger.error(f"节点 {node_id} 没有属性 '{attribute}'")
             print(f"节点 {node_id} 没有属性 '{attribute}'")
             return None
     
-    def get_edge(self, node1, node2):
+    def get_edge(self, node1, node2) -> dict:
         """
         查找两个节点之间的边
         
@@ -75,7 +102,7 @@ class UndirectedGraph:
             node1, node2: 两个节点的ID
             
         返回:
-            边信息字典，如果边不存在则返回None
+            边信息字典，如果边不存在则返回空字典
         """
         # 确保node1 <= node2，因为我们的存储规则是较小节点ID在前
         if node1 > node2:
@@ -84,11 +111,13 @@ class UndirectedGraph:
         # 查询边信息
         for edge_dict in self.graph_edges:
             if (node1, node2) in edge_dict:
+                logger.info(f"获取边 ({node1}, {node2}) 信息: {edge_dict[(node1, node2)]}")
                 return edge_dict[(node1, node2)]
                 
-        return None
+        logger.error(f"边 ({node1}, {node2}) 不存在")
+        return {}
     
-    def get_edge_attribute(self, node1, node2, attribute=None):
+    def get_edge_attribute(self, node1, node2, attribute=None) -> Optional[Union[int, float, str, dict]]:
         """
         获取边的属性
         
@@ -102,16 +131,18 @@ class UndirectedGraph:
         """
         edge_info = self.get_edge(node1, node2)
         
-        if edge_info is None:
-            print(f"节点 {node1} 和节点 {node2} 之间没有边")
+        if not edge_info:
+            logger.error(f"节点 {node1} 和节点 {node2} 之间没有边")
             return None
             
         if attribute is None:
+            logger.info(f"获取边 ({node1}, {node2}) 的所有属性: {edge_info}")
             return edge_info
         elif attribute in edge_info:
+            logger.info(f"获取边 ({node1}, {node2}) 的属性 '{attribute}': {edge_info[attribute]}")
             return edge_info[attribute]
         else:
-            print(f"边 ({node1}, {node2}) 没有属性 '{attribute}'")
+            logger.error(f"边 ({node1}, {node2}) 没有属性 '{attribute}'")
             return None
     
     def has_edge(self, node1, node2):
@@ -124,7 +155,9 @@ class UndirectedGraph:
         返回:
             布尔值，表示是否存在边
         """
-        return self.get_edge(node1, node2) is not None
+        result = self.get_edge(node1, node2) != {}
+        logger.info(f"检查边 ({node1}, {node2}) 是否存在: {result}")
+        return result
     
     def find_path(self, start_node, end_node):
         """
@@ -138,10 +171,11 @@ class UndirectedGraph:
             如果存在路径，返回节点ID列表；否则返回None
         """
         if start_node not in self.adjacency_list or end_node not in self.adjacency_list:
-            print(f"节点 {start_node} 或节点 {end_node} 不存在")
+            logger.error(f"节点 {start_node} 或节点 {end_node} 不存在")
             return None
             
         if start_node == end_node:
+            logger.info(f"起点和终点相同: {start_node}")
             return [start_node]
             
         # 广度优先搜索
@@ -152,6 +186,7 @@ class UndirectedGraph:
             current, path = queue.pop(0)
             
             if current == end_node:
+                logger.info(f"找到路径: {path}")
                 return path
                 
             if current in visited:
@@ -163,7 +198,7 @@ class UndirectedGraph:
                 if neighbor not in visited:
                     queue.append((neighbor, path + [neighbor]))
                     
-        print(f"节点 {start_node} 和节点 {end_node} 之间不连通")
+        logger.error(f"节点 {start_node} 和节点 {end_node} 之间不连通")
         return None
     
     def is_connected(self, node1, node2):
@@ -179,15 +214,18 @@ class UndirectedGraph:
         path = self.find_path(node1, node2)
         
         if path:
+            logger.info(f"节点 {node1} 和节点 {node2} 连通，路径: {path}")
             print(f"节点 {node1} 和节点 {node2} 连通")
             print(f"路径: {' -> '.join(map(str, path))}")
             return True
         else:
+            logger.info(f"节点 {node1} 和节点 {node2} 不连通")
             print(f"节点 {node1} 和节点 {node2} 不连通")
             return False
     
     def print_graph(self):
         """打印整个图的结构：节点属性和边信息"""
+        logger.info("打印整个图的结构")
         print("=" * 20 + " 节点信息 " + "=" * 20)
         for node_id, info in self.node_info.items():
             print(f"节点 {node_id}: {info}")
@@ -205,13 +243,16 @@ class UndirectedGraph:
             node_id: 节点ID
         """
         if node_id not in self.adjacency_list:
+            logger.error(f"节点 {node_id} 不存在")
             print(f"节点 {node_id} 不存在")
             return
             
         neighbors = self.adjacency_list[node_id]
         if not neighbors:
+            logger.info(f"节点 {node_id} 没有邻居")
             print(f"节点 {node_id} 没有邻居")
         else:
+            logger.info(f"节点 {node_id} 的邻居: {neighbors}")
             print(f"节点 {node_id} 的邻居: {', '.join(map(str, neighbors))}")
     
     def find_nodes_by_attribute(self, attribute, value):
@@ -231,9 +272,10 @@ class UndirectedGraph:
             if attribute in info and info[attribute] == value:
                 matching_nodes.append(node_id)
                 
+        logger.info(f"查找属性 {attribute}={value} 的节点: {matching_nodes}")
         return matching_nodes
     
-    def find_edges_by_attribute(self, attribute:str, value):
+    def find_edges_by_attribute(self, attribute: str, value):
         """
         查找具有特定属性值的所有边
         
@@ -251,6 +293,7 @@ class UndirectedGraph:
                 if attribute in info and info[attribute] == value:
                     matching_edges.append(edge)
                     
+        logger.info(f"查找属性 {attribute}={value} 的边: {matching_edges}")
         return matching_edges
     
     def get_all_paths(self, start_node, end_node, max_depth=10):
@@ -266,6 +309,7 @@ class UndirectedGraph:
             路径列表，每个路径是节点ID的列表
         """
         if start_node not in self.adjacency_list or end_node not in self.adjacency_list:
+            logger.error(f"节点 {start_node} 或节点 {end_node} 不存在")
             print(f"节点 {start_node} 或节点 {end_node} 不存在")
             return []
             
@@ -286,6 +330,7 @@ class UndirectedGraph:
                     path.pop()  # 回溯
         
         dfs(start_node, [start_node], 0)
+        logger.info(f"所有路径从 {start_node} 到 {end_node}: {paths}")
         return paths
     
     # =============== 新增功能 ===============
@@ -302,11 +347,13 @@ class UndirectedGraph:
             布尔值，表示是否成功添加
         """
         if node_id in self.node_info:
+            logger.error(f"节点 {node_id} 已存在")
             print(f"节点 {node_id} 已存在")
             return False
         
         self.node_info[node_id] = attributes or {}
         self.adjacency_list[node_id] = []
+        logger.info(f"添加节点 {node_id}，属性: {attributes}")
         return True
     
     def add_nodes(self, nodes_dict):
@@ -324,6 +371,7 @@ class UndirectedGraph:
             if self.add_node(node_id, attributes):
                 count += 1
         
+        logger.info(f"批量添加节点，成功数量: {count}")
         print(f"成功添加 {count} 个节点")
         return count
     
@@ -340,14 +388,17 @@ class UndirectedGraph:
         """
         # 确保两个节点都存在
         if node1 not in self.node_info:
+            logger.error(f"节点 {node1} 不存在")
             print(f"节点 {node1} 不存在")
             return False
         if node2 not in self.node_info:
+            logger.error(f"节点 {node2} 不存在")
             print(f"节点 {node2} 不存在")
             return False
         
         # 确保边不存在
         if self.has_edge(node1, node2):
+            logger.error(f"边 ({node1}, {node2}) 已存在")
             print(f"边 ({node1}, {node2}) 已存在")
             return False
         
@@ -363,6 +414,7 @@ class UndirectedGraph:
         self.adjacency_list[node1].append(node2)
         self.adjacency_list[node2].append(node1)
         
+        logger.info(f"添加边 ({node1}, {node2})，属性: {attributes}")
         return True
     
     def add_edges(self, edges_list):
@@ -386,6 +438,7 @@ class UndirectedGraph:
             if self.add_edge(node1, node2, attributes):
                 count += 1
         
+        logger.info(f"批量添加边，成功数量: {count}")
         print(f"成功添加 {count} 条边")
         return count
     
@@ -400,6 +453,7 @@ class UndirectedGraph:
             布尔值，表示是否成功删除
         """
         if node_id not in self.node_info:
+            logger.error(f"节点 {node_id} 不存在")
             print(f"节点 {node_id} 不存在")
             return False
         
@@ -421,6 +475,7 @@ class UndirectedGraph:
         del self.node_info[node_id]
         del self.adjacency_list[node_id]
         
+        logger.info(f"删除节点 {node_id} 及其相关边")
         return True
     
     def remove_nodes(self, node_ids):
@@ -438,6 +493,7 @@ class UndirectedGraph:
             if self.remove_node(node_id):
                 count += 1
         
+        logger.info(f"批量删除节点，成功数量: {count}")
         print(f"成功删除 {count} 个节点")
         return count
     
@@ -463,6 +519,7 @@ class UndirectedGraph:
                 break
         
         if edge_dict_to_remove is None:
+            logger.error(f"边 ({node1}, {node2}) 不存在")
             print(f"边 ({node1}, {node2}) 不存在")
             return False
         
@@ -472,6 +529,7 @@ class UndirectedGraph:
         self.adjacency_list[node1].remove(node2)
         self.adjacency_list[node2].remove(node1)
         
+        logger.info(f"删除边 ({node1}, {node2})")
         return True
     
     def remove_edges(self, edges_list):
@@ -489,6 +547,7 @@ class UndirectedGraph:
             if self.remove_edge(node1, node2):
                 count += 1
         
+        logger.info(f"批量删除边，成功数量: {count}")
         print(f"成功删除 {count} 条边")
         return count
     
@@ -505,10 +564,12 @@ class UndirectedGraph:
             布尔值，表示是否成功更新
         """
         if node_id not in self.node_info:
+            logger.error(f"节点 {node_id} 不存在")
             print(f"节点 {node_id} 不存在")
             return False
         
         self.node_info[node_id][attribute] = value
+        logger.info(f"更新节点 {node_id} 的属性 {attribute}={value}")
         return True
     
     def update_node_attributes(self, node_id, attributes):
@@ -523,10 +584,12 @@ class UndirectedGraph:
             布尔值，表示是否成功更新
         """
         if node_id not in self.node_info:
+            logger.error(f"节点 {node_id} 不存在")
             print(f"节点 {node_id} 不存在")
             return False
         
         self.node_info[node_id].update(attributes)
+        logger.info(f"批量更新节点 {node_id} 的属性: {attributes}")
         return True
     
     def batch_update_node_attributes(self, updates):
@@ -544,6 +607,7 @@ class UndirectedGraph:
             if self.update_node_attributes(node_id, attributes):
                 count += 1
         
+        logger.info(f"批量更新多个节点属性，成功数量: {count}")
         print(f"成功更新 {count} 个节点的属性")
         return count
     
@@ -567,8 +631,10 @@ class UndirectedGraph:
         for edge_dict in self.graph_edges:
             if (node1, node2) in edge_dict:
                 edge_dict[(node1, node2)][attribute] = value
+                logger.info(f"更新边 ({node1}, {node2}) 的属性 {attribute}={value}")
                 return True
         
+        logger.error(f"边 ({node1}, {node2}) 不存在")
         print(f"边 ({node1}, {node2}) 不存在")
         return False
     
@@ -591,8 +657,10 @@ class UndirectedGraph:
         for edge_dict in self.graph_edges:
             if (node1, node2) in edge_dict:
                 edge_dict[(node1, node2)].update(attributes)
+                logger.info(f"批量更新边 ({node1}, {node2}) 的属性: {attributes}")
                 return True
         
+        logger.error(f"边 ({node1}, {node2}) 不存在")
         print(f"边 ({node1}, {node2}) 不存在")
         return False
     
@@ -612,6 +680,7 @@ class UndirectedGraph:
             if self.update_edge_attributes(node1, node2, attributes):
                 count += 1
         
+        logger.info(f"批量更新多条边属性，成功数量: {count}")
         print(f"成功更新 {count} 条边的属性")
         return count
     
@@ -626,8 +695,12 @@ class UndirectedGraph:
             度数（整数）
         """
         if node_id not in self.adjacency_list:
+            logger.error(f"节点 {node_id} 不存在")
             print(f"节点 {node_id} 不存在")
             return 0
+        else:
+            logger.info(f"节点 {node_id} 的度: {len(self.adjacency_list[node_id])}")
+            print(f"节点 {node_id} 的度: {len(self.adjacency_list[node_id])}")
         
         return len(self.adjacency_list[node_id])
     
@@ -638,6 +711,7 @@ class UndirectedGraph:
         返回:
             字典，键为节点ID，值为度数
         """
+        logger.info("获取所有节点的度")
         return {node: len(neighbors) for node, neighbors in self.adjacency_list.items()}
     
     def get_average_degree(self):
@@ -648,10 +722,13 @@ class UndirectedGraph:
             平均度（浮点数）
         """
         if not self.node_info:
+            logger.error("节点信息为空，无法计算平均度")
             return 0
         
         degrees = self.get_all_degrees()
-        return sum(degrees.values()) / len(degrees)
+        avg = sum(degrees.values()) / len(degrees)
+        logger.info(f"平均度: {avg}")
+        return avg
     
     def get_node_attribute_statistics(self, attribute):
         """
@@ -668,6 +745,7 @@ class UndirectedGraph:
             if attribute in info:
                 values.append(info[attribute])
         
+        logger.info(f"节点属性 {attribute} 的统计: {Counter(values)}")
         return Counter(values)
     
     def get_edge_attribute_statistics(self, attribute):
@@ -686,6 +764,7 @@ class UndirectedGraph:
                 if attribute in info:
                     values.append(info[attribute])
         
+        logger.info(f"边属性 {attribute} 的统计: {Counter(values)}")
         return Counter(values)
     
     def get_attribute_summary(self, attribute_type="node", attribute=None):
@@ -737,7 +816,9 @@ class UndirectedGraph:
                 }
                 stats.append(stat)
         
-        return pd.DataFrame(stats) if stats else pd.DataFrame()
+        df = pd.DataFrame(stats) if stats else pd.DataFrame()
+        logger.info(f"属性统计摘要: \n{df}")
+        return df
     
     def to_networkx(self):
         """
@@ -757,6 +838,7 @@ class UndirectedGraph:
             for (node1, node2), attrs in edge_dict.items():
                 G.add_edge(node1, node2, **attrs)
         
+        logger.info("转换为NetworkX图对象")
         return G
     
     def visualize(self, figsize=(10, 8), node_size=300, node_color="skyblue", 
@@ -776,6 +858,7 @@ class UndirectedGraph:
             edge_attribute: 用于边颜色映射的属性名
             title: 图表标题
         """
+        logger.info("可视化图结构")
         G = self.to_networkx()
         
         # 设置Seaborn风格
@@ -851,6 +934,7 @@ class UndirectedGraph:
             figsize: 图像大小元组 (宽, 高)
             bins: 直方图的柱数
         """
+        logger.info("可视化节点度分布")
         degrees = list(self.get_all_degrees().values())
         
         plt.figure(figsize=figsize)
@@ -881,6 +965,7 @@ class UndirectedGraph:
             plot_type: "hist"（直方图）或 "bar"（条形图）
             top_n: 对于条形图，只显示前N个最常见的值
         """
+        logger.info(f"可视化属性 {attribute_type} '{attribute}' 分布")
         if attribute_type == "node":
             values = []
             for _, info in self.node_info.items():
@@ -896,6 +981,7 @@ class UndirectedGraph:
             title_prefix = "边属性"
         
         if not values:
+            logger.error(f"没有找到 {attribute_type} 的 '{attribute}' 属性数据")
             print(f"没有找到 {attribute_type} 的 '{attribute}' 属性数据")
             return
         
@@ -935,6 +1021,7 @@ class UndirectedGraph:
         参数:
             figsize: 图像大小元组 (宽, 高)
         """
+        logger.info("可视化图的各种度量指标")
         G = self.to_networkx()
         metrics = {}
         
@@ -986,6 +1073,7 @@ class UndirectedGraph:
                     print(f"  {i}. 节点 {node}: {value:.4f}")
                     
         except nx.NetworkXError as e:
+            logger.error(f"无法计算部分中心性指标: {e}")
             print(f"无法计算部分中心性指标: {e}")
     
     def visualize_communities(self, algorithm="louvain", figsize=(12, 10), with_labels=True):
@@ -997,6 +1085,7 @@ class UndirectedGraph:
             figsize: 图像大小元组 (宽, 高)
             with_labels: 是否显示节点标签
         """
+        logger.info(f"社区检测并可视化，算法: {algorithm}")
         G = self.to_networkx()
         communities = {}
         
@@ -1055,10 +1144,12 @@ class UndirectedGraph:
                 print(f"社区 {i+1}: {len(comm)} 个节点")
             
         except ImportError:
+            logger.error(f"无法使用所选社区检测算法，请安装相应的包")
             print(f"无法使用所选社区检测算法，请安装相应的包")
             if algorithm == "louvain":
                 print("使用Louvain算法需要安装python-louvain包: pip install python-louvain")
         except Exception as e:
+            logger.error(f"社区检测过程中出错: {e}")
             print(f"社区检测过程中出错: {e}")
     
     def plot_shortest_paths(self, start_node, end_nodes=None, figsize=(12, 10)):
@@ -1070,7 +1161,9 @@ class UndirectedGraph:
             end_nodes: 目标节点ID列表，若为None则选择距离最远的几个节点
             figsize: 图像大小元组 (宽, 高)
         """
+        logger.info(f"可视化最短路径，起始节点: {start_node}，目标节点: {end_nodes}")
         if start_node not in self.node_info:
+            logger.error(f"起始节点 {start_node} 不存在")
             print(f"起始节点 {start_node} 不存在")
             return
         
@@ -1108,6 +1201,7 @@ class UndirectedGraph:
                     for i in range(len(path) - 1):
                         path_edges.append((path[i], path[i + 1]))
                 except nx.NetworkXNoPath:
+                    logger.error(f"节点 {start_node} 和节点 {end_node} 之间不连通")
                     print(f"节点 {start_node} 和节点 {end_node} 之间不连通")
         
         # 绘制路径上的节点和边
@@ -1157,6 +1251,7 @@ class UndirectedGraph:
                 print(f"  节点序列: {' -> '.join(map(str, path))}")
                 print(f"  路径长度: {len(path) - 1}")
         else:
+            logger.info("未找到任何路径")
             print("未找到任何路径")
     
     def to_pandas(self):
@@ -1166,6 +1261,7 @@ class UndirectedGraph:
         返回:
             元组 (nodes_df, edges_df)，分别为节点DataFrame和边DataFrame
         """
+        logger.info("转换为Pandas DataFrame")
         # 创建节点数据框
         nodes_data = []
         for node_id, attributes in self.node_info.items():
@@ -1191,6 +1287,7 @@ class UndirectedGraph:
             nodes_file: 节点数据的CSV文件名
             edges_file: 边数据的CSV文件名
         """
+        logger.info(f"导出图数据到CSV: {nodes_file}, {edges_file}")
         nodes_df, edges_df = self.to_pandas()
         
         nodes_df.to_csv(nodes_file, index=False)
@@ -1206,6 +1303,7 @@ class UndirectedGraph:
         返回:
             字典，包含各种图指标
         """
+        logger.info("计算图的所有重要指标")
         G = self.to_networkx()
         metrics = {}
         
@@ -1251,6 +1349,7 @@ class UndirectedGraph:
                 metrics['平均最短路径长度 (最大连通分量)'] = nx.average_shortest_path_length(subgraph)
         
         except Exception as e:
+            logger.error(f"计算部分图指标时出错: {e}")
             print(f"计算部分图指标时出错: {e}")
         
         return metrics
@@ -1259,6 +1358,7 @@ class UndirectedGraph:
         """
         打印图的完整分析报告
         """
+        logger.info("打印图的完整分析报告")
         metrics = self.compute_all_metrics()
         
         print("=" * 50)
@@ -1300,4 +1400,3 @@ class UndirectedGraph:
         print("\n" + "=" * 50)
         print("注: 部分指标可能因图结构而无法计算或只针对最大连通分量计算")
         print("=" * 50)
-        
