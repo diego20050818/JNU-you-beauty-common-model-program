@@ -32,11 +32,17 @@ jobs:
         uv venv
         source .venv/bin/activate
         uv pip install -r requirements.txt
-    - name: Test
+    - name: Test problem 1
       run: |
         uv run 深圳杯C题/problem1.py
+    - name: Test problem 2
+      run: |
         uv run 深圳杯C题/problem2.py
+    - name: Test problem 3
+      run: |
         uv run 深圳杯C题/problem3.py
+    - name: Test problem 4
+      run: |
         uv run 深圳杯C题/problem4.py
 
 
