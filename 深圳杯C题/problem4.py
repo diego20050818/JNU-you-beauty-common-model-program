@@ -53,6 +53,11 @@ def problem4():
         else:
             risks_with_storage.append(0)
 
+    # 输出说明数据
+    print("光伏最大接入容量 (kW):", list(capacities))
+    print("无储能过负荷风险:", risks_no_storage)
+    print("配置储能过负荷风险:", risks_with_storage)
+
     plt.plot(capacities, risks_no_storage, 'r-o', label="无储能")
     plt.plot(capacities, risks_with_storage, 'b-s', label="配置储能")
     plt.xlabel("光伏最大接入容量 (kW)")

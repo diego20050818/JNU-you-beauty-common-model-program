@@ -6,6 +6,7 @@ import matplotlib.pyplot as plt
 from collections import deque 
 import json 
 from tqdm.rich import tqdm
+
 def problem2():
     """问题2：分析 DG 容量从 300 至 900kW 的风险演变曲线"""
     capacities = np.arange(300, 901, 90)
@@ -35,6 +36,12 @@ def problem2():
                 total_risk += analyzer.load_loss_risk(line) + analyzer.overload_risk(line)
         risks.append(total_risk)
 
+    # 输出数据说明
+    print("DG容量(kW) 与 系统总风险 数据如下：")
+    for cap, risk in zip(capacities, risks):
+        print(f"容量: {cap} kW, 系统总风险: {risk}")
+
+    # 绘图
     plt.plot(capacities, risks, 'r-o')
     plt.xlabel("DG 单机容量 (kW)")
     plt.ylabel("系统总风险")

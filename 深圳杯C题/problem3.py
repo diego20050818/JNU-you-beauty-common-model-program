@@ -20,7 +20,12 @@ def problem3():
     plt.xlabel("时间 (h)")
     plt.ylabel("出力功率 (kW)")
     plt.grid()
-    plt.show()
+    try:
+        plt.show()
+    except:
+        print("无法显示图像，输出典型光伏出力曲线数据：")
+        for ti, pi in zip(t, P_pv):
+            print(f"时间: {ti:.2f} h, 出力功率: {pi:.2f} kW")
 
     node_id = "32"  # 注意：nodes_info 的 key 是字符串
     capacities = np.linspace(300, 900, 7)
@@ -54,7 +59,11 @@ def problem3():
     plt.ylabel("过负荷风险")
     plt.title("问题3：PV容量 vs 风险")
     plt.grid()
+
     plt.show()
+
+    for cap, risk in zip(capacities, risks):
+        print(f"容量: {cap:.2f} kW, 风险: {risk:.4f}")
 
 if __name__ == '__main__':
     problem3()
