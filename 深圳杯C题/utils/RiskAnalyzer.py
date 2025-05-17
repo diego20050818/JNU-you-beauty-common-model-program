@@ -103,13 +103,13 @@ class RiskAnalyzer:
             logger.error(f"刷新容量时出错: {e}")
             raise
 
-    def edmonds_karp(self, source, sink) -> float:
+    def edmonds_karp(self, source, sink) -> float:#TODO 添加类型提示，一定要是int、或者添加对馈线的识别和支持
         logger.info(f"正在运行Edmonds-Karp算法，源点: {source}，汇点: {sink}")
         max_flow = 0
         parent = {}
 
         def bfs():
-            parent.clear()
+            parent.clear()# TODO 添加对于馈线的处理
             visited = set()
             queue = deque([source])
             visited.add(source)
@@ -169,14 +169,14 @@ class RiskAnalyzer:
             logger.error(f"计算线路{line}故障概率时出错: {e}")
             raise
 
-    def load_loss_risk(self, line) -> float:  
+    def load_loss_risk(self, line:tuple) -> float:  
         logger.info(f"正在计算线路{line}的失负荷风险")
         try:
             u, v = line 
             u = str(u)
             v = str(v) 
             P_f = self.failure_probability(line)  
-            source = self.nodes_info[str(u)]["which_substation"]
+            source = self.nodes_info[str(u)]["which_substation"]# TODO 这里的逻辑有点问题，馈线的归属是字符串，不是浦东的节点ID
             sink = self.nodes_info[str(v)]["which_substation"] 
             L_transfer = self.edmonds_karp(source, sink)  
             L_load = self.nodes_info[u]["power"] + self.nodes_info[str(v)]["power"]  
