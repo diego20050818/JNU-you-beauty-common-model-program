@@ -13,23 +13,18 @@ def problem1():
     # 添加多条线路，节点范围1-62
     
     lines = [
-        (4, 5),
-        (1, 2),
-        (10, 11),
-        (20, 21),
-        (30, 31),
-        (40, 41),
-        (50, 51),
-        (60, 61),
-        (15, 16),
-        (25, 26),
-        (23,62)
+        (13,43),
+        (3,4)
     ]
     
     result = []
-    for line_info in edges_info:
+    print_all = False  # 打印模式，如果是True，则打印所有线路的风险评估结果，反之只打印测试案例
+    for line_info in (edges_info if print_all else lines):
         # 计算失负荷和过负荷风险
-        line = list(line_info.keys())[0]
+        if print_all:
+            line = list(line_info.keys())[0]
+        else:
+            line = line_info
         
         risk_loss = analyzer.load_loss_risk(line)
         risk_over = analyzer.overload_risk(line)

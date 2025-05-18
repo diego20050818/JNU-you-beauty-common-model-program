@@ -63,6 +63,7 @@ class RiskAnalyzer:
 
     def _capacity(self, u:int, v:int) -> float:
         """
+        原版
         计算并返回指定边 (u, v) 的容量。
         容量计算公式：(V^2 / Z) * 0.9，Z为阻抗，V为电压
         """
@@ -313,7 +314,7 @@ class RiskAnalyzer:
 
     def _overload_risk(self, line) -> float:  
         """
-        计算指定线路的过载风险
+        计算指定线路的过载风险--原版
         """
         logger.info(f"正在计算线路{line}的过载风险")
         try:
@@ -359,78 +360,25 @@ class RiskAnalyzer:
         """
         计算指定线路的过载风险，考虑馈线间功率转移，禁止向变电站倒送。
         过载定义：线路电流超过额定载流量 10% 以上。
-
-        ### 公式推导
-
-        #### 1. 功率流计算
-        - **节点净出力**：
-        $$
-        P_{\text{net}} = P_{\text{dg}} - P_{\text{load}}
-        $$
-        - \( P_{\text{dg}} \): 分布式电源出力，若 `DG = True`，则 \( P_{\text{dg}} = 0.3 \, \text{MW} \)；否则 0。
-        - \( P_{\text{load}} \): 节点负荷功率，从 `nodes_info[u]["power"]` 获取（kW，转换为 MW）。
-        - **线路功率流**：
-        $$
-        P_{\text{flow}} = P_{\text{net}}
-        $$
-        - 假设功率从节点 \( u \) 流向 \( v \)，简化模型，未进行潮流分析。
-        - **倒送检查**：
-        - 若节点 \( v \) 连接变电站（`which_substation in ["CB1", "CB2", "CB3"]`）且 \( P_{\text{flow}} > 0 \)，视为倒送，风险为 0。
-
-        #### 2. 馈线间功率转移
-        - 对于节点 \( u \) 的邻居 \( j \)（通过联络线，`联络开关 != "None"`）：
-        - **负荷余量**：
-            $$
-            \text{available}_j = \max(P_{\text{load},j} - P_{\text{dg},j}, 0)
-            $$
-        - **可转移功率**：
-            $$
-            P_{\text{transfer},j} = \min(C_{ij}, \text{available}_j)
-            $$
-            - \( C_{ij} \): 边 (u, j) 或 (j, u) 的容量（MW）。
-        - **总转移功率**：
-            $$
-            P_{\text{transfer_max}} = \sum_j P_{\text{transfer},j}
-            $$
-
-        #### 3. 过载量
-        - $$
-        \text{overload} = \max(P_{\text{flow}} - P_{\text{transfer_max}}, 0)
-        $$
-        - 单位：MW。
-
-        #### 4. 线路电流
-        - $$
-        I = \frac{\text{overload} \cdot 10^3}{\sqrt{3} \cdot V \cdot \cos\phi}
-        $$
-        - \( \text{overload} \): MW，转换为 kW (\( \cdot 10^3 \)).
-        - \( V = 10,000 \, \text{V} \)，\( \cos\phi = 0.95 \)。
-        - \( I \): 安培。
-
-        #### 5. 过载风险
-        - 额定电流：\( I_{\text{rated}} = 220 \, \text{A} \).
-        - 风险指标：
-        $$
-        C_{\text{over}} = 100 \cdot \max(I - 1.1 \cdot I_{\text{rated}}, 0)
-        $$
-        - 乘以 100 为放大系数。
-
-        ### 参数
-        - `line`: 元组 (u, v)，表示线路的起点和终点。
-        - 返回：过载风险值 \( C_{\text{over}} \)。
         """
         logger.info(f"正在计算线路{line}的过载风险")
+        self.refreash_capacity()  # 刷新容量信息
+        logger.info(f"线路{line}的容量信息已刷新")
         try:
             u, v = line
             u = str(u)
             v = str(v)
             # 计算节点 u 的净出力，单位 MW
             P_dg = 0.3 if self.nodes_info[u]["DG"] else 0  # DG 固定 0.3 MW
+            logger.info(f"节点{u}的DG出力 P_dg: {P_dg} MW")
             P_load = self.nodes_info[u]["power"] / 1000  # 负荷 kW 转 MW
+            logger.info(f"节点{u}的负荷 P_load: {P_load} MW")
             P_net = P_dg - P_load  # 净出力（MW）
+            logger.info(f"节点{u}的净出力 P_net: {P_net} MW")
 
             # 估算线路 (u, v) 的功率流
             P_flow = P_net  # 假设功率从 u 流向 v
+            logger.info(f"线路{line}的功率流 P_flow: {P_flow} MW")
             # 检查是否倒送至变电站
             if "which_substation" in self.nodes_info[v] and self.nodes_info[v]["which_substation"] in ["CB1", "CB2", "CB3"]:
                 if P_flow > 0:  # 正向流向变电站（倒送）
@@ -441,30 +389,38 @@ class RiskAnalyzer:
             P_transfer_max = 0
             for neighbor in self.graph.neighbors(int(u)):
                 try:
-                    #neighbor = str(neighbor)
-                    #edge = (u, neighbor) if self.graph.get_edge_attribute(u, neighbor, "capacity") is not None else (neighbor, u)
-                    _neighbor,_u = int(neighbor),int(u)
+                    _neighbor, _u = int(neighbor), int(u)
                     # 检查是否为联络线
-                    if self.graph.get_edge_attribute(_neighbor,_u, "联络开关") != "None":
-                        C_ij = self.graph.get_edge_attribute(_neighbor,_u, "capacity")
-                        P_load_j = self.nodes_info[neighbor]["power"] / 1000  # kW 转 MW
-                        P_dg_j = 0.3 if self.nodes_info[neighbor]["DG"] else 0
+                    if self.graph.get_edge_attribute(_neighbor, _u, "联络开关") != "None":
+                        C_ij = self.graph.get_edge_attribute(_neighbor, _u, "capacity")
+                        logger.info(f"边({_neighbor},{_u})的容量 C_ij: {C_ij}")
+                        P_load_j = self.nodes_info[str(neighbor)]["power"] / 1000  # kW 转 MW
+                        logger.info(f"邻居节点{neighbor}的负荷 P_load_j: {P_load_j} MW")
+                        P_dg_j = 0.3 if self.nodes_info[str(neighbor)]["DG"] else 0
+                        logger.info(f"邻居节点{neighbor}的DG出力 P_dg_j: {P_dg_j} MW")
                         available = max(P_load_j - P_dg_j, 0)  # 邻居负荷余量
+                        logger.info(f"邻居节点{neighbor}的可用负荷 available: {available} MW")
                         if isinstance(C_ij, (int, float)):
-                            P_transfer_max += min(C_ij, available)
+                            transfer = min(C_ij, available)
+                            logger.info(f"边({_neighbor},{_u})的可转移功率 transfer: {transfer} MW")
+                            P_transfer_max += transfer
                         else:
-                            logger.error(f"边{neighbor,u}的capacity无效: {C_ij}")
+                            logger.error(f"边{neighbor,u}的capacity无效: {C_ij}，注意馈间联络线默认关闭，请检查")
                             continue
                 except Exception as e:
                     logger.error(f"计算{u}的邻居{neighbor}转移能力时出错: {e}")
                     continue
 
+            logger.info(f"节点{u}的总可转移功率 P_transfer_max: {P_transfer_max} MW")
             # 计算过载量
             overload = max(P_flow - P_transfer_max, 0)  # 单位 MW
+            logger.info(f"线路{line}的过载量 overload: {overload} MW")
             # 计算线路电流
             I = overload * 1e3 / (10e3 * np.sqrt(3) * 0.95)  # 单位：安培
+            logger.info(f"线路{line}的过载电流 I: {I} A")
             # 过载风险（额定电流 220 A）
             rated_current = 220.0
+            logger.info(f"额定电流 rated_current: {rated_current} A")
             C_over = 100 * max(I - 1.1 * rated_current, 0)
             logger.info(f"线路{line}的过载风险为{C_over:.4f}")
             return C_over
