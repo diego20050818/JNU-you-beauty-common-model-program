@@ -94,7 +94,7 @@ class UndirectedGraph:
             print(f"节点 {node_id} 没有属性 '{attribute}'")
             return None
     
-    def get_edge(self, node1, node2) -> dict:
+    def get_edge(self, node1:int, node2:int) -> dict:
         """
         查找两个节点之间的边
         
@@ -117,7 +117,7 @@ class UndirectedGraph:
         logger.error(f"边 ({node1}, {node2}) 不存在")
         return {}
     
-    def get_edge_attribute(self, node1, node2, attribute=None) -> Optional[Union[int, float, str, dict]]:
+    def get_edge_attribute(self, node1:int, node2:int, attribute=None) -> Optional[Union[int, float, str, dict]]:
         """
         获取边的属性
         

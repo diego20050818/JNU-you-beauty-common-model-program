@@ -18,3 +18,5 @@ networkx
 tqdm
 rich
 loguru
+ipykernel
+tabulate
