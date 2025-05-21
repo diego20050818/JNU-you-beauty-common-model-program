@@ -10,8 +10,8 @@ from collections import deque
 import json 
 from loguru import logger
 
-edges_file = '深圳杯C题/data_file/edges_info.json' 
-nodes_file = '深圳杯C题/data_file/nodes_info.json'
+edges_file = '/home/diego/文档/JNU-you-beauty-common-model-program/深圳杯C题/data_file/edges_info.json'
+nodes_file = '/home/diego/文档/JNU-you-beauty-common-model-program/深圳杯C题/data_file/nodes_info.json'
 
 try:
     logger.info(f"Opening edges file: {edges_file}")
