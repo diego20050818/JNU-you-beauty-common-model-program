@@ -79,22 +79,25 @@ def load_data(limit=15):
 # ---------------------- 图结构与网络流模型 ----------------------  
 class PowerGridGraph:  
     def __init__(self, nodes, edges):  
+        # 节点信息字典，key为节点编号
         self.nodes = {node["id"]: node for node in nodes}  
+        # 边信息字典，key为(起点, 终点)元组
         self.edges = {}  
+        # 邻接表，key为节点编号，value为相邻节点列表
         self.adjacency = {}  
 
-        # 初始化边容量（基于阻抗）  
+        # 初始化边容量（基于阻抗）
         for edge in edges:  
             u, v = edge["from"], edge["to"]  
             R = edge["resistor"]  
             X = edge["reactance"]  
-            V = 10e3  # 10kV  
-            Z = np.sqrt(R**2 + X**2)  
-            edge["capacity"] = (V**2 / Z) * 0.9  # 功率因数0.9  
-            self.adjacency.setdefault(u, []).append(v)  
+            V = 10e3  # 10kV 电压
+            Z = np.sqrt(R**2 + X**2)  # 计算阻抗
+            edge["capacity"] = (V**2 / Z) * 0.9  # 功率因数0.9，计算容量
+            self.adjacency.setdefault(u, []).append(v)  # 添加邻接关系
             self.adjacency.setdefault(v, []).append(u)  
-            self.edges[(u, v)] = edge  
-            self.edges[(v, u)] = edge  
+            self.edges[(u, v)] = edge  # 正向边
+            self.edges[(v, u)] = edge  # 反向边（便于残量网络处理）
 
     def find_substation(self, node_id):  
         """定位变电站节点（假设CB1~CB3为1, 2, 3）"""  
@@ -116,6 +119,7 @@ class PowerGridGraph:
         parent = {}
 
         def bfs():
+            # 广度优先搜索寻找增广路径
             parent.clear()
             visited = set()
             queue = deque([source])
@@ -123,6 +127,7 @@ class PowerGridGraph:
             while queue:
                 u = queue.popleft()
                 for v in self.adjacency.get(u, []):
+                    # 只考虑有剩余容量的边
                     if v not in visited and self.edges[(u, v)]["capacity"] > 0:
                         visited.add(v)
                         parent[v] = u
@@ -132,6 +137,7 @@ class PowerGridGraph:
             return False
 
         while bfs():
+            # 找到一条增广路径，计算可增流量
             path_flow = float("inf")
             v = sink
             while v != source:
@@ -139,6 +145,7 @@ class PowerGridGraph:
                 path_flow = min(path_flow, self.edges[(u, v)]["capacity"])
                 v = u
             max_flow += path_flow
+            # 沿路径更新残量网络
             v = sink
             while v != source:
                 u = parent[v]

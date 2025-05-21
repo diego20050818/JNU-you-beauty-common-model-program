@@ -66,7 +66,7 @@ class UndirectedGraph:
         logger.info(f"获取节点 {node_id} 的邻居: {self.adjacency_list[node_id]}")
         return self.adjacency_list[node_id]
     
-    def get_node_attribute(self, node_id, attribute=None):
+    def get_node_attribute(self, node_id:str, attribute=None):
         """
         获取节点的属性
         
