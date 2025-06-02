@@ -117,7 +117,7 @@ class UndirectedGraph:
         logger.error(f"边 ({node1}, {node2}) 不存在")
         return {}
     
-    def get_edge_attribute(self, node1:int, node2:int, attribute=None) -> Optional[Union[int, float, str, dict]]:
+    def get_edge_attribute(self, node1:int, node2:int, attribute=None):
         """
         获取边的属性
         

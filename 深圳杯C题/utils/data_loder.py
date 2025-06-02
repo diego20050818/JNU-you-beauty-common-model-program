@@ -10,8 +10,8 @@ from collections import deque
 import json 
 from loguru import logger
 
-edges_file = '/home/diego/文档/JNU-you-beauty-common-model-program/深圳杯C题/data_file/edges_info.json'
-nodes_file = '/home/diego/文档/JNU-you-beauty-common-model-program/深圳杯C题/data_file/nodes_info.json'
+edges_file = '深圳杯C题\\data_file\\edges_info.json'
+nodes_file = '深圳杯C题\\data_file\\nodes_info.json'
 
 try:
     logger.info(f"Opening edges file: {edges_file}")
@@ -30,3 +30,9 @@ try:
     logger.info("Nodes info loaded successfully.")
 except Exception as e:
     logger.error(f"Failed to load nodes info: {e}")
+
+if __name__ == '__main__':
+    print("="*20+" edges info "+"="*20)
+    print(edges_info)
+    print("="*20+" nodes info "+"="*20)
+    print(nodes_info)
