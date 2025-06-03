@@ -98,10 +98,10 @@ class RiskAnalyzer:
         self.edge_each_length_risk = 0.002  # 配电线路单位长度故障率
         
         # 电网参数设置
-        self.feeder_capacity = 2200         # 馈线额定容量 (kW)
+        self.feeder_capacity = 2200         # TODO馈线额定容量 (kW)
         self.feeder_current_limit = 220     # 馈线额定电流 (A)
-        self.voltage = 10e3                 # 电压等级 (V) - 修正为10kV
-        self.dg_capacity = 3e2              # 分布式能源容量 (kW) - 修正为300kW
+        self.voltage = 10e2                 # 电压等级 (V) - 修正为10kV
+        self.dg_capacity = 3e4              # 分布式能源容量 (kW) - 修正为300kW
         self.cos = 0.9                      # 功率因数
         
         # 变电站映射表
@@ -220,10 +220,11 @@ class RiskAnalyzer:
                 return 0.0
             
             # 容量计算公式: P = V²/(Z) * cosφ
-            capacity = np.square(self.voltage) / Z_abs * self.cos / 1000  # 转换为kW
+            capacity = np.square(self.voltage) / (Z_abs * self.cos) #TODO 转换为kW
             
-            return min(capacity, self.feeder_capacity)  # 不超过馈线额定容量
-            
+            #return min(capacity, self.feeder_capacity) 
+            #  # 不超过馈线额定容量
+            return capacity / 10e2
         except Exception as e:
             logger.error(f"计算边({begin}, {end})容量时出错: {e}")
             return 0.0
@@ -569,7 +570,7 @@ class RiskAnalyzer:
             
             # 电流计算公式：I = P / (√3 × U × cosφ)
             # P: 功率(kW), U: 线电压(kV), cosφ: 功率因数
-            voltage_kv = self.voltage / 1000  # 转换为kV
+            voltage_kv = self.voltage / 1000 #TODO 转换为kV
             current = line_power / (np.sqrt(3) * voltage_kv * self.cos)  # A
             
             return current
@@ -661,7 +662,7 @@ class RiskAnalyzer:
             }
             
             # 计算综合风险指标
-            results['total_risk'] = (results['load_loss_risk'] + 
+            results['total_risk'] = (results['load_loss_risk']*results['load_loss_consequence'] + 
                                    results['overload_probability'] * results['overload_consequence'])
             
             return results
@@ -713,10 +714,15 @@ class RiskAnalyzer:
             print(f"过载危害度: {results.get('overload_consequence', 0):.2f}")
             print(f"综合风险指标: {results.get('total_risk', 0):.6f}")
             
-            print("\n关键线路Top 5:")
-            critical_lines = self.get_critical_lines(5)
+            print("\n线路:")
+            critical_lines = self.get_critical_lines(62)
             for i, (edge, current) in enumerate(critical_lines, 1):
-                status = "过载" if current > 1.1 * self.feeder_current_limit else "正常"
+                if current == 0:
+                    status = "失负荷"
+                elif current > 1.1 * self.feeder_current_limit:
+                    status = "过载"
+                else:
+                    status = "正常"
                 print(f"{i}. 线路{edge}: {current:.2f}A ({status})")
                 
         except Exception as e:
