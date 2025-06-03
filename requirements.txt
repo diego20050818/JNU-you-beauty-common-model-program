@@ -20,3 +20,4 @@ rich
 loguru
 ipykernel
 tabulate
+prettytable
