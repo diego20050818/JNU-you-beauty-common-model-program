@@ -1,5 +1,6 @@
 import sys
 import os
+# 将上级目录加入系统路径，方便导入自定义模块
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 import pandas as pd
@@ -10,7 +11,9 @@ import json
 import copy
 from typing import Optional, Dict, List, Tuple, Set
 
+# 导入自定义的无向图类
 from utils.tool import UndirectedGraph
+# 导入节点和边的数据
 from utils.data_loder import nodes_info, edges_info
 from loguru import logger
 
@@ -40,10 +43,13 @@ class RiskAnalyzer:
             edges_info: 边信息列表，格式为 [{(begin, end): {length, type, 分段开关, 联络开关, Resistor, Reactance}}]
             rated_current: 额定电流，默认 220A
         """
-        # 基础数据初始化
+        # 节点信息深拷贝，防止外部修改
         self._nodes_info = nodes_info.copy()
+        # 边信息深拷贝
         self._edges_info = edges_info.copy()
+        # 构建无向图对象
         self._graph = UndirectedGraph(self._nodes_info, self._edges_info)
+        # 额定电流
         self._rated_current = rated_current
 
         # 深圳市用户类型负荷波动权重参数表
@@ -132,7 +138,7 @@ class RiskAnalyzer:
     def nodes_info(self) -> Dict:
         """获取节点信息"""
         return self._nodes_info
-
+    
     @property
     def edges_info(self) -> List:
         """获取边信息"""
@@ -169,7 +175,9 @@ class RiskAnalyzer:
             该边的故障概率
         """
         try:
+            # 获取边的长度
             length = self._graph.get_edge_attribute(begin, end, 'length')
+            # 故障概率 = 长度 * 单位长度故障率
             return float(length) * self.edge_each_length_risk
         except Exception as e:
             logger.error(f"计算边({begin}, {end})故障概率时出错: {e}")
@@ -187,8 +195,10 @@ class RiskAnalyzer:
             线路传输容量 (kW)
         """
         try:
+            # 获取电阻和电抗
             R = self._graph.get_edge_attribute(begin, end, 'Resistor')
             X = self._graph.get_edge_attribute(begin, end, 'Reactance')
+            # 计算阻抗
             Z = complex(float(R), float(X))
             Z_abs = np.abs(Z)
 
@@ -196,15 +206,17 @@ class RiskAnalyzer:
                 logger.warning(f"边({begin}, {end})阻抗为0")
                 return 0.0
 
-            capacity = np.square(self.voltage) / (Z_abs * self.cos) / 10e2  # 转换为 kW
+            # 计算容量（kW）
+            capacity = np.square(self.voltage) / (Z_abs * self.cos) / 10e2
 
-            # 如果任一节点为 DG 节点，增加 DG 容量
+            # 如果有分布式能源，增加容量
             begin_is_dg = self._graph.get_node_attribute(str(begin), 'DG')
             end_is_dg = self._graph.get_node_attribute(str(end), 'DG')
             if begin_is_dg or end_is_dg:
                 capacity += self.dg_capacity
 
-            return min(capacity, self.feeder_capacity)  # 不超过馈线额定容量
+            # 不超过馈线额定容量
+            return min(capacity, self.feeder_capacity)
         except Exception as e:
             logger.error(f"计算边({begin}, {end})容量时出错: {e}")
             return 0.0
@@ -238,6 +250,7 @@ class RiskAnalyzer:
         if start_node in substations:
             return [start_node], 0.0
 
+        # 队列用于BFS，元素为(当前节点, 路径, 距离)
         queue = deque([(start_node, [start_node], 0.0)])
         visited = set()
 
@@ -251,6 +264,7 @@ class RiskAnalyzer:
                 return path, distance
 
             try:
+                # 遍历邻居节点
                 for neighbor in self._graph.neighbors(int(current)):
                     neighbor_str = str(neighbor)
                     if neighbor_str not in visited:
@@ -271,28 +285,33 @@ class RiskAnalyzer:
         Returns:
             字典，键为边的标准化元组，值为该边承载的功率 (kW)
         """
+        # 如果有缓存，直接返回
         if self._power_flow_cache:
             return self._power_flow_cache
 
         edge_powers = defaultdict(float)
 
+        # 遍历所有节点
         for node_id, node_info in self._nodes_info.items():
             power_demand = node_info.get('power', 0)
             is_dg = node_info.get('DG', False)
 
-            # 如果是 DG 节点，减少功率需求
+            # 如果是分布式能源节点，减少需求
             if is_dg and power_demand > 0:
                 power_demand = max(power_demand - self.dg_capacity, 0)
 
             if power_demand > 0:
+                # 找到到最近变电站的最短路径
                 path, min_distance = self._find_shortest_path_to_substation(node_id)
                 if path and len(path) > 1:
+                    # 路径上的每条边都加上该节点的需求
                     for i in range(len(path) - 1):
                         edge_key = self._get_edge_key(int(path[i]), int(path[i+1]))
                         edge_powers[edge_key] += power_demand
                 else:
                     logger.warning(f"节点 {node_id} 无法找到到变电站的路径")
 
+        # 缓存结果
         self._power_flow_cache = dict(edge_powers)
         return self._power_flow_cache
 
@@ -310,6 +329,7 @@ class RiskAnalyzer:
         Returns:
             最大流值 (kW)
         """
+        # 将变电站名称映射为节点编号
         source = self._substation_map.get(source, source)
         sink = self._substation_map.get(sink, sink)
 
@@ -317,13 +337,14 @@ class RiskAnalyzer:
             logger.warning(f"源点 {source} 和汇点 {sink} 相同，返回 0")
             return 0.0
 
+        # 构建残量网络
         residual_capacity = {}
         for edge in self._edges_info:
             edge_id, edge_info = list(edge.items())[0]
             begin, end = edge_id
             capacity = self.calculate_capacity(begin, end)
 
-            # 如果任一节点为 DG 节点，增加容量
+            # 如果有分布式能源，增加容量
             begin_is_dg = self._graph.get_node_attribute(str(begin), 'DG')
             end_is_dg = self._graph.get_node_attribute(str(end), 'DG')
             if begin_is_dg or end_is_dg:
@@ -333,6 +354,7 @@ class RiskAnalyzer:
             residual_capacity[(end, begin)] = capacity
 
         def bfs_find_path() -> Optional[List[str]]:
+            # BFS 寻找增广路径
             parents = {}
             visited = set([source])
             queue = deque([source])
@@ -340,7 +362,9 @@ class RiskAnalyzer:
                 u = queue.popleft()
                 for v in self._graph.neighbors(int(u)):
                     v_str = str(v)
+                    # 只考虑有剩余容量的边
                     if v_str not in visited and residual_capacity.get((int(u), v), 0) > 0:
+                        # 不使用联络线时跳过联络线
                         if (use_tie == (0, 0) and
                                 self._graph.get_edge_attribute(int(u), v, "type") == "馈线间联络线"):
                             continue
@@ -348,6 +372,7 @@ class RiskAnalyzer:
                         visited.add(v_str)
                         queue.append(v_str)
                         if v_str == sink:
+                            # 回溯得到路径
                             path = []
                             current = sink
                             while current is not None:
@@ -362,12 +387,14 @@ class RiskAnalyzer:
                 path = bfs_find_path()
                 if not path:
                     break
+                # 找到路径上的最小剩余容量
                 path_flow = float("inf")
                 for i in range(len(path) - 1):
                     u, v = int(path[i]), int(path[i + 1])
                     path_flow = min(path_flow, residual_capacity.get((u, v), 0))
                 if path_flow == 0:
                     break
+                # 更新残量网络
                 for i in range(len(path) - 1):
                     u, v = int(path[i]), int(path[i + 1])
                     residual_capacity[(u, v)] -= path_flow
@@ -391,9 +418,12 @@ class RiskAnalyzer:
         for edge in self.edges_info:
             edge_id, edge_info = list(edge.items())[0]
             begin, end = edge_id
+            # 基础故障概率 = 长度 * 单位长度故障率
             line_prob = edge_info['length'] * self.edge_each_length_risk
+            # 有分段开关则加上开关故障率
             if edge_info.get('分段开关') not in [None, 'None', '']:
                 line_prob += self.switch_risk
+            # 有分布式能源则加上DG故障率
             begin_has_dg = self._graph.get_node_attribute(str(begin), 'DG')
             end_has_dg = self._graph.get_node_attribute(str(end), 'DG')
             if begin_has_dg or end_has_dg:
@@ -415,8 +445,10 @@ class RiskAnalyzer:
             node_type = node_data.get('type', '居民')
             weight = self._damage_weights.get(node_type, 1.0)
             load_demand = node_data.get('power', 0)
+            # 只考虑没有分布式能源且有负荷的节点
             if not node_data.get('DG', False) and load_demand > 0:
                 max_transferable = 0.0
+                # 计算到所有变电站的最大流，取最大值
                 for substation in ['CB1', 'CB2', 'CB3']:
                     try:
                         flow = self.edmons_krap(source=substation, sink=node_id)
@@ -424,6 +456,7 @@ class RiskAnalyzer:
                     except Exception as e:
                         logger.error(f"计算节点 {node_id} 到 {substation} 最大流时出错: {e}")
                         continue
+                # 失负荷 = 需求 - 最大可转移
                 load_loss = max(load_demand - max_transferable, 0)
                 consequence = weight * load_loss
                 total_consequence += consequence
@@ -441,11 +474,14 @@ class RiskAnalyzer:
             power_demand = node_data.get('power', 0)
             if power_demand <= 0:
                 continue
+            # 故障概率
             failure_prob = self.dg_risk if node_data.get('DG', False) else self.node_risk
+            # 有分布式能源则减去DG容量
             effective_demand = power_demand
             if node_data.get('DG', False):
                 effective_demand = max(power_demand - self.dg_capacity, 0)
             max_transfer = 0.0
+            # 计算到所有变电站的最大流
             for substation in ['CB1', 'CB2', 'CB3']:
                 try:
                     flow = self.edmons_krap(source=substation, sink=node_id)
@@ -453,6 +489,7 @@ class RiskAnalyzer:
                 except Exception as e:
                     logger.error(f"计算节点 {node_id} 最大转移负荷时出错: {e}")
                     continue
+            # 失负荷
             load_loss = max(effective_demand - max_transfer, 0)
             node_risk = failure_prob * load_loss
             total_risk += node_risk
@@ -472,12 +509,14 @@ class RiskAnalyzer:
             线路电流值 (A)
         """
         try:
+            # 获取潮流结果
             edge_powers = self.calculate_power_flow_simple()
             edge_key = self._get_edge_key(begin, end)
             line_power = edge_powers.get(edge_key, 0.0)
             if line_power <= 0:
                 return 0.0
             voltage_kv = self.voltage / 1000
+            # 三相交流电流计算公式
             current = line_power / (np.sqrt(3) * voltage_kv * self.cos)
             return current
         except Exception as e:
@@ -520,11 +559,13 @@ class RiskAnalyzer:
             try:
                 current = self.I_ij(begin, end)
                 if current > threshold:
+                    # 获取两端节点类型
                     begin_type = self._graph.get_node_attribute(str(begin), 'type') or '居民'
                     end_type = self._graph.get_node_attribute(str(end), 'type') or '居民'
                     begin_weight = self._damage_weights.get(begin_type, 1.0)
                     end_weight = self._damage_weights.get(end_type, 1.0)
                     avg_weight = (begin_weight + end_weight) / 2
+                    # 有分布式能源则危害度降低
                     begin_is_dg = self._graph.get_node_attribute(str(begin), 'DG')
                     end_is_dg = self._graph.get_node_attribute(str(end), 'DG')
                     dg_factor = 0.8 if (begin_is_dg or end_is_dg) else 1.0
@@ -553,6 +594,7 @@ class RiskAnalyzer:
                 'overload_probability': self.P_ol_all(),
                 'overload_consequence': self.C_ol(),
             }
+            # 综合风险指标 = 失负荷风险*失负荷危害度 + 过载概率*过载危害度
             results['total_risk'] = (results['load_loss_risk'] * results['load_loss_consequence'] +
                                      results['overload_probability'] * results['overload_consequence'])
             return results
@@ -579,6 +621,7 @@ class RiskAnalyzer:
             except Exception as e:
                 logger.error(f"获取线路 ({begin}, {end}) 电流时出错: {e}")
                 continue
+        # 按电流降序排序
         line_currents.sort(key=lambda x: x[1], reverse=True)
         return line_currents[:top_n]
 
@@ -626,6 +669,7 @@ def main():
         logger.error(e)
 
 if __name__ == "__main__":
+    # 设置日志等级为WARNING
     logger.remove()
     logger.add(sys.stderr, level="WARNING")
     main()

@@ -17,7 +17,6 @@ analyzer = RiskAnalyzer(nodes_info=nodes_info,edges_info=edges_info)
 graph = UndirectedGraph(node_info=nodes_info,graph_edges=edges_info)
 
 
-
 def visualized():
     G = nx.DiGraph()
     
