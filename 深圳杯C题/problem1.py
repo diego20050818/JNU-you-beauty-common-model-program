@@ -38,8 +38,8 @@ def visualized():
         node_key = int(node_id)
         G.add_node(node_key, feeder=feeder)
         node_colors[node_key] = color
-        node_labels[node_key] = f"v{node_id}\n{node_info['type']}\n{node_info['power']}kw\n{feeder}"
-
+        #node_labels[node_key] = f"v{node_id}\n{node_info['type']}\n{node_info['power']}kw\n{feeder}"
+        node_labels[node_key] = f"v{node_id}"
     print(f"添加了 {len(G.nodes())} 个节点")
     print(f"节点列表: {list(G.nodes())}")
 
@@ -70,7 +70,8 @@ def visualized():
             current = analyzer.I_ij(begin, end)
             current = max(current, 0.1)  # 避免为0不显示
             
-            label = f"风险:{risk:.3f}\n容量:{capacity:.1f}\n电流:{current:.1f}A\n{info['type']}"
+            #label = f"风险:{risk:.3f}\n容量:{capacity:.1f}\n电流:{current:.1f}A\n{info['type']}"
+            label = f"风险：{risk:.3f}"
             G.add_edge(begin_int, end_int)
             edge_labels[(begin_int, end_int)] = label
             edge_currents[(begin_int, end_int)] = current
@@ -93,7 +94,26 @@ def visualized():
     y_base = {'CB1': 3, 'CB2': 2, 'CB3': 1}
     x_counter = {'CB1': 0, 'CB2': 0, 'CB3': 0, 'default': 0}'''
 
-    pos = nx.kamada_kawai_layout(G,weight='length',scale=1,dim=2)
+    #pos = nx.kamada_kawai_layout(G,weight='length',scale=1,dim=2)
+    # ---------- 自定义布局 ----------
+    pos = {
+    1: (0, 0), 2: (1, 0), 3: (2, 0), 4: (3, 0), 5: (4, 0), 6: (5, 0), 7: (6, 0),
+    8: (7, 0), 9: (8, 0), 10: (9, 0), 11: (10, 0), 12: (11, 0), 13: (12, 0),
+    14: (5, -1), 15: (4, -1), 16: (3, -1),
+    17: (2, 1), 18: (3, 1), 19: (4, 1),
+    20: (0, -1), 21: (-1, -1), 22: (-2, -1),
+    23: (2, 2), 24: (3, 2), 25: (4, 2),
+    26: (5, 2), 27: (6, 2), 28: (7, 2),
+    29: (8, 2), 30: (9, 2), 31: (10, 2), 32: (11, 2),
+    33: (5, 3), 34: (4, 3), 35: (3, 3),
+    36: (3, 1), 37: (1, 1), 38: (0, 1), 39: (-1, 1),
+    40: (2, 3), 41: (1, 3), 42: (1, 4),
+    43: (14, 2), 44: (15, 2), 45: (16, 2), 46: (17, 2), 47: (18, 2), 48: (19, 2),
+    49: (15, 1), 50: (16, 1), 51: (17, 1), 52: (18, 1),
+    53: (16, 3), 54: (17, 3), 55: (18, 3),
+    56: (8, 4), 57: (9, 4), 58: (10, 4), 59: (11, 4), 60: (12, 4), 61: (13, 4), 62: (14, 4)
+    }
+
     for node_id in G.nodes():
         feeder = G.nodes[node_id].get('feeder', 'default')
         #x = x_counter[feeder] * 2
@@ -141,7 +161,7 @@ def visualized():
                            style='solid', 
                            ax=ax, 
                            alpha=0.8,
-                           arrows=True)  # 确保显示方向箭头
+                           arrows=False)  # 确保显示方向箭头
 
     # 边标签
     if edge_labels:
@@ -154,9 +174,9 @@ def visualized():
     sm = plt.cm.ScalarMappable(cmap=cmap, norm=norm)
     sm.set_array([])
     cbar = fig.colorbar(sm, ax=ax)
-    cbar.set_label("边电流 (A)")
+    cbar.set_label("current (A)")
 
-    ax.set_title("电网风险可视化（按馈线布局）", fontsize=16)
+    ax.set_title("电网风险可视化（按馈线布局）", fontsize=16,fontfamily='SimHei')
     ax.axis('off')
     
     # 调整图形边界
@@ -164,6 +184,7 @@ def visualized():
     
     plt.tight_layout()
     plt.show()
+
 
 
 
@@ -180,7 +201,7 @@ def problem1(print_entire_graph=False, instances=None, print_logs=True):
     analyzer.print_analysis_summary()
     #graph.visualize_graph_metrics()
     visualized()
-    
+    #visualized_matplotlib()
 
 logger.remove()
 logger.add(sys.stderr, level="WARNING") 
